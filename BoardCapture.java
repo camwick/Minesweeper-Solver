@@ -19,6 +19,7 @@ public class BoardCapture{
 		}
 	}
 
+	// public methods
 	public void screenshot(){
 		Rectangle screenRect = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());
 		BufferedImage img =  this.bot.createScreenCapture(screenRect);
