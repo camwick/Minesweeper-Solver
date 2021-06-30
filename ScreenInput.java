@@ -2,30 +2,51 @@ import java.awt.*;
 
 public class ScreenInput{
 	// variables
-	Robot bot;
+	private Robot bot;
+	private int row;
+	private int column;
+	private Color one = new Color(0, 0, 255);
+	private Color two = new Color(0, 128, 0);
+	private Color three = new Color(255, 0, 0);
+	private Color unmarked = new Color(198, 198, 198);
 
 	// constructors
-	public ScreenInput(){
+	public ScreenInput(int row, int column){
 		try{
 			this.bot = new Robot();
+			this.row = row;
+			this.column = column;
 		}
 		catch(AWTException e){
 			System.out.println(e);
+			System.exit(0);
 		}
 	}
 
 	// public methods
-	public String getBoardString(Board board){
+	public String getBoardString(){
+		String output = "";
+		Color cellColor;
 
+		for(int i = 0; i < this.column; i++){
+			for(int j = 0; j < this.row; j++){
+				cellColor = this.bot.getPixelColor(1086 + 40 * j, 396 + 40 * i);
+
+				if(cellColor.equals(this.unmarked)){
+					output += "0";
+				}
+				else if(cellColor.equals(this.one)){
+					output += "1";
+				}
+				else if(cellColor.equals(this.two)){
+					output += "2";
+				}
+				else if(cellColor.equals(this.three)){
+					output += "3";
+				}
+			}
+		}
+
+		return output;
 	}
 }
-
-/*
-First Cell position: 
-	- 1086x396
-
-Green - rgb(0, 128, 0)
-red   - rgb(255, 0, 0)
-blue  - rgb(0, 0, 255)
-gray  - rgb(198, 198, 198)
-*/
