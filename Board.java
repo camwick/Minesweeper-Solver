@@ -2,6 +2,7 @@ public class Board{
 	// private variables
 	private int difficulty;
 	private int column;
+	private int row;
 	private Cell[][] board;
 
 	// constructors
@@ -12,16 +13,19 @@ public class Board{
 			case 0:
 				this.board = new Cell[9][];
 				this.column = 9;
+				this.row = 9;
 				boardSetup(this.board, 9, gameString);
 				break;
 			case 1:
 				board = new Cell[16][];
 				this.column = 16;
+				this.row = 16;
 				boardSetup(this.board, 16, gameString);
 				break;
 			case 2:
 				board = new Cell[16][];
 				this.column = 30;
+				this.row = 16;
 				boardSetup(this.board, 30, gameString);
 				break;
 			default:
