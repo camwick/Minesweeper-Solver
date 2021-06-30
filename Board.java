@@ -1,7 +1,7 @@
 public class Board{
 	// private variables
 	private int difficulty;
-	private int row;
+	private int column;
 	private Cell[][] board;
 
 	// constructors
@@ -11,17 +11,17 @@ public class Board{
 		switch(this.difficulty){
 			case 0:
 				this.board = new Cell[9][];
-				this.row = 9;
+				this.column = 9;
 				boardSetup(this.board, 9, gameString);
 				break;
 			case 1:
 				board = new Cell[16][];
-				this.row = 16;
+				this.column = 16;
 				boardSetup(this.board, 16, gameString);
 				break;
 			case 2:
 				board = new Cell[16][];
-				this.row = 30;
+				this.column = 30;
 				boardSetup(this.board, 30, gameString);
 				break;
 			default:
@@ -33,12 +33,12 @@ public class Board{
 	// public methods
 
 	// private methods
-	private void boardSetup(Cell[][] board, int row, String gameString){
+	private void boardSetup(Cell[][] board, int column, String gameString){
 		int stringIndex = 0;
 		for(int i = 0; i < board.length; i++){
-			board[i] = new Cell[row];
+			board[i] = new Cell[column];
 
-			for(int j = 0; j < row; j++){
+			for(int j = 0; j < column; j++){
 				board[i][j] = new Cell(stringIndex, gameString.charAt(stringIndex));
 				stringIndex++;
 			}
@@ -49,7 +49,7 @@ public class Board{
 	public String toString(){
 		String output = "";
 
-		for(int i = 0; i < row + 12; i++){
+		for(int i = 0; i < column + 12; i++){
 			output += "-";
 		}
 		output += "\n";
@@ -57,14 +57,14 @@ public class Board{
 		for(int i = 0; i < this.board.length; i++){
 			output += "| ";
 
-			for(int j = 0; j < this.row; j++){
+			for(int j = 0; j < this.column; j++){
 				output += this.board[i][j].getCellContents() + " ";
 			}
 
 			output += "|\n";
 		}
 
-		for(int i = 0; i < row + 12; i++){
+		for(int i = 0; i < column + 12; i++){
 			output += "-";
 		}
 		output += "\n";
