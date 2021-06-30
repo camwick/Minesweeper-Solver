@@ -38,7 +38,7 @@ public class Board{
 		for(int i = 0; i < board.length; i++){
 			board[i] = new Cell[row];
 
-			for(int j = 0; j > row; j++){
+			for(int j = 0; j < row; j++){
 				board[i][j] = new Cell(stringIndex, gameString.charAt(stringIndex));
 				stringIndex++;
 			}
@@ -49,22 +49,22 @@ public class Board{
 	public String toString(){
 		String output = "";
 
-		for(int i = 0; i < row + 2; i++){
+		for(int i = 0; i < row + 12; i++){
 			output += "-";
 		}
 		output += "\n";
 
 		for(int i = 0; i < this.board.length; i++){
-			output += "|";
+			output += "| ";
 
 			for(int j = 0; j < this.row; j++){
-				output += this.board[i][j].getCellContents();
+				output += this.board[i][j].getCellContents() + " ";
 			}
 
-			output += "|";
+			output += "|\n";
 		}
 
-		for(int i = 0; i < row + 2; i++){
+		for(int i = 0; i < row + 12; i++){
 			output += "-";
 		}
 		output += "\n";
