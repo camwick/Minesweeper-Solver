@@ -42,6 +42,3 @@ public class Solver{
 		System.out.println(game);
 	}
 }
-
-// Test strings:
-// 00001f2110000112f1110111111f102f20001102f200001121100002f21221002f22ff1001112f310
