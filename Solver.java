@@ -7,7 +7,7 @@ public class Solver{
 		String difficulty, boardInput;
 
 		// user input
-		System.out.print("Board Difficulty Key:\n0 - Beginner - 9x9\n1 - Intermediate - 16x16\n2 - Expert - 16x30\nResponse: ");
+		System.out.print("Board Difficulty Key:\n0: Beginner     - 9x9\n1: Intermediate - 16x16\n2: Expert       - 16x30\nResponse: ");
 		difficulty = input.nextLine();
 
 		System.out.print("\n\nGame Input String Key:\nu - unmarked cell\nf - flag\n0 - empty cell\n# - corrosponding number\nEnter String: ");
@@ -15,6 +15,8 @@ public class Solver{
 
 		// board creation
 		Board game = new Board(0, boardInput);
+
+		System.out.println(game);
 	}
 }
 

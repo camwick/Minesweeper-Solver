@@ -9,6 +9,15 @@ public class Cell{
 		this.cellContents = x;
 	}
 
+	// Get methods
+	private int getId(){
+		return this.id;
+	}
+
+	public char getCellContents(){
+		return this.cellContents;
+	}
+
 	// toString
 	public String toString(){
 		return "(" + id + ", " + cellContents + ")";

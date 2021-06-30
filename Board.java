@@ -1,6 +1,7 @@
 public class Board{
 	// private variables
 	private int difficulty;
+	private int row;
 	private Cell[][] board;
 
 	// constructors
@@ -10,14 +11,17 @@ public class Board{
 		switch(this.difficulty){
 			case 0:
 				this.board = new Cell[9][];
+				this.row = 9;
 				boardSetup(this.board, 9, gameString);
 				break;
 			case 1:
 				board = new Cell[16][];
+				this.row = 16;
 				boardSetup(this.board, 16, gameString);
 				break;
 			case 2:
 				board = new Cell[16][];
+				this.row = 30;
 				boardSetup(this.board, 30, gameString);
 				break;
 			default:
@@ -43,7 +47,27 @@ public class Board{
 
 	// toString
 	public String toString(){
-		String output;
+		String output = "";
+
+		for(int i = 0; i < row + 2; i++){
+			output += "-";
+		}
+		output += "\n";
+
+		for(int i = 0; i < this.board.length; i++){
+			output += "|";
+
+			for(int j = 0; j < this.row; j++){
+				output += this.board[i][j].getCellContents();
+			}
+
+			output += "|";
+		}
+
+		for(int i = 0; i < row + 2; i++){
+			output += "-";
+		}
+		output += "\n";
 
 		return output;
 	}
