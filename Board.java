@@ -35,6 +35,13 @@ public class Board{
 	}
 
 	// public methods
+	public int getRow(){
+		return this.row;
+	}
+
+	public int getColumn(){
+		return this.column;
+	}
 
 	// private methods
 	private void boardSetup(Cell[][] board, int column, String gameString){
