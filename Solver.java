@@ -2,18 +2,19 @@ import java.util.Scanner;
 
 public class Solver{
 	public static void main(String[] args){
+		// variables
 		Scanner input = new Scanner(System.in);
-		System.out.println("Key:\nu - unmarked cell\nf - flag\n0 - empty cell\n# - corrosponding number\nEnter String: ");
+		String difficulty, boardInput;
 
-		String boardInput = input.nextLine();
+		// user input
+		System.out.print("Board Difficulty Key:\n0 - Beginner - 9x9\n1 - Intermediate - 16x16\n2 - Expert - 16x30\nResponse: ");
+		difficulty = input.nextLine();
 
-		String[] boardArr = new String[9];
+		System.out.print("Key:\nu - unmarked cell\nf - flag\n0 - empty cell\n# - corrosponding number\nEnter String: ");
+		boardInput = input.nextLine();
 
-		int index = 0;
-		for(int i = 0; i < 81; i+=9){
-			boardArr[index] = boardInput.substring(i, i+9);
-			index++;
-		}
+		// board creation
+		Board game = new Board(0, boardInput);
 	}
 }
 

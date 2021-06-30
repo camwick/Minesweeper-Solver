@@ -43,6 +43,8 @@ public class Board{
 
 	// toString
 	public String toString(){
-		return "";
+		String output;
+
+		return output;
 	}
 }
