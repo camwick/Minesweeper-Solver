@@ -8,6 +8,7 @@ public class ScreenInput{
 	private Color one = new Color(0, 0, 255);
 	private Color two = new Color(0, 128, 0);
 	private Color three = new Color(255, 0, 0);
+	private Color four = new Color(0, 0, 128);
 	private Color unmarked = new Color(198, 198, 198);
 
 	// constructors
@@ -43,6 +44,13 @@ public class ScreenInput{
 				}
 				else if(cellColor.equals(this.three)){
 					output += "3";
+				}
+				else if(cellColor.equals(this.four)){
+					output += "4";
+				}
+				else{
+					System.out.println("Found color not saved: " + cellColor + "\nRow: " + i + "\nColumn: " + j);
+					System.exit(0);
 				}
 			}
 		}
