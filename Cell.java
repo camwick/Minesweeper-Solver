@@ -2,13 +2,13 @@ public class Cell{
 	// private variables
 	private int id;
 	private char cellContents;
-	private int flagCount;
+	private int mineCount;
 
 	// constructors
 	public Cell(int id, char x){
 		this.id = id;
 		this.cellContents = x;
-		this.flagCount = 0;
+		this.mineCount = 0;
 	}
 
 	// Get methods
