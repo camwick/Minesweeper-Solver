@@ -2,13 +2,11 @@ public class Cell{
 	// private variables
 	private int id;
 	private char cellContents;
-	private int mineCount;
 
 	// constructors
 	public Cell(int id, char x){
 		this.id = id;
 		this.cellContents = x;
-		this.mineCount = 0;
 	}
 
 	// Get methods
@@ -18,6 +16,11 @@ public class Cell{
 
 	public char getCellContents(){
 		return this.cellContents;
+	}
+
+	// public methods
+	public void markMine(){
+		self.cellContents = 'f';
 	}
 
 	// toString
