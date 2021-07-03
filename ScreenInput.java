@@ -10,7 +10,8 @@ public class ScreenInput{
 	private Color three = new Color(255, 0, 0);
 	private Color four = new Color(0, 0, 128);
 	private Color empty = new Color(198, 198, 198);
-	private Color unmarked = new Color(128,128,128);
+	private Color unmarked = new Color(128, 128, 128);
+	private Color flag = new Color(0, 0, 0);
 
 	// constructors
 	public ScreenInput(int row, int column){
@@ -34,11 +35,13 @@ public class ScreenInput{
 			for(int j = 0; j < this.row; j++){
 				cellColor = this.bot.getPixelColor(1086 + 40 * j, 396 + 40 * i);
 
-				if(cellColor.equals(this.empty)){
-					if(this.bot.getPixelColor(1086 + 40 * j + 17, 396 + 40 * i + 17).equals(this.unmarked))
+				if(this.bot.getPixelColor(1086 + 40 * j, 396 + 40 * i + 6).equals(this.flag))
+					output += "f";
+				else if(cellColor.equals(this.empty)){
+					if(this.bot.getPixelColor(1086 + 40 * j + 17, 396 + 40 * i).equals(this.unmarked))
 						output += "u";
 					else 
-						output += "0";
+						output += " ";
 				}
 				else if(cellColor.equals(this.one))
 					output += "1";
