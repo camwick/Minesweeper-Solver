@@ -20,7 +20,7 @@ public class Cell{
 
 	// public methods
 	public void markMine(){
-		self.cellContents = 'f';
+		this.cellContents = 'f';
 	}
 
 	// toString
