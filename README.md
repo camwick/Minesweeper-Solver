@@ -2,7 +2,7 @@
 
 A Minesweeper bot to automatically solve minesweeper puzzles.
 The goal is not to achieve a competitive solver to achieve low time solves. 
-This is just a fun project to challenge ourselves.
+This is just a fun project to challenge ourselves. We will be utilizing algorithms and pattern recognition to hopefully achieve a solve state.
 
 I am not opposed to creating our own minesweeper gui using Java Swing.
 
