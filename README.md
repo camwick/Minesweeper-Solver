@@ -6,6 +6,7 @@ This is just a fun project to challenge ourselves.
 
 ## Goals:
 - Solve no-guess boards on [minesweeper.online](https://minesweeper.online/)
+  - Might switch to [Minesweeper Arbiter](https://minesweepergame.com/download/arbiter.php) due to bots being against minesweeper.online's rules
 - Automatically update board state
 - Bot is capable of moving the mouse and clicking
 - Basic minesweeper pattern recognition
