@@ -1,6 +1,8 @@
 # Minesweeper-Solver
 
 A Minesweeper bot to automatically solve minesweeper puzzles.
+The goal is not to achieve a competitive solver to achieve low time solves. 
+This is just a fun project to challenge ourselves.
 
 ## Goals:
 - Solve no-guess boards on [minesweeper.online](https://minesweeper.online/)
