@@ -4,6 +4,8 @@ A Minesweeper bot to automatically solve minesweeper puzzles.
 The goal is not to achieve a competitive solver to achieve low time solves. 
 This is just a fun project to challenge ourselves.
 
+I am not opposed to creating our own minesweeper gui using Java Swing.
+
 ## Goals:
 - Solve no-guess boards on [minesweeper.online](https://minesweeper.online/)
   - Might switch to [Minesweeper Arbiter](https://minesweepergame.com/download/arbiter.php) due to bots being against minesweeper.online's rules
