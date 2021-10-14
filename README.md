@@ -6,6 +6,8 @@ This is just a fun project to challenge ourselves.
 
 I am not opposed to creating our own minesweeper gui using Java Swing.
 
+Make sure to create a pull request before merging to main.
+
 ## Goals:
 - Solve no-guess boards on [minesweeper.online](https://minesweeper.online/)
   - Might switch to [Minesweeper Arbiter](https://minesweepergame.com/download/arbiter.php) due to bots being against minesweeper.online's rules
