@@ -8,6 +8,12 @@ I am not opposed to creating our own minesweeper gui using Java Swing.
 
 Make sure to create a pull request before merging to main.
 
+## Working On:
+- potential branches to work on:
+  - get board state from screen
+    - create some sort of input object to be given to an object constructor for Board
+  - create Board object form said input object
+
 ## Goals:
 - Solve no-guess boards on [minesweeper.online](https://minesweeper.online/)
   - Might switch to [Minesweeper Arbiter](https://minesweepergame.com/download/arbiter.php) due to bots being against minesweeper.online's rules
