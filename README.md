@@ -1,4 +1,4 @@
-# Minesweeper-Solver
+# Minesweeper-Bot
 
 A Minesweeper bot to automatically solve minesweeper puzzles.
 The goal is not to achieve a competitive solver to achieve low time solves. 
