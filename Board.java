@@ -16,6 +16,5 @@ public class Board {
                 this.board[x][y] = new Cell();
             }
         }
-
     }
 }
