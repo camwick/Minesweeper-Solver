@@ -8,11 +8,12 @@ public class Board {
         this.width = width;
         this.height = height;
         this.mineCount = mines;
+        this.board = new Cell[width][height];
 
         // initiate Cell objects
-        for (int x = 0; x < this.height; x++) {
-            for (int y = 0; y < this.width; y++) {
-                board[x][y] = new Cell();
+        for (int x = 0; x < this.width; x++) {
+            for (int y = 0; y < this.height; y++) {
+                this.board[x][y] = new Cell();
             }
         }
 
