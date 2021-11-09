@@ -8,6 +8,7 @@ public class Solver {
     private Board gameBoard;
     private int ul_x;
     private int ul_y;
+    private int cellSideLength;
 
     public Solver(int difficulty) {
         // create bot object
@@ -58,7 +59,7 @@ public class Solver {
         // loop right until first gray bar
         for (int x = 0; x < width / 2; ++x) {
             pxColor = this.bot.getPixelColor(x, height / 2);
-            if (pxColor.getRed() == 192 && pxColor.getGreen() == 192 && pxColor.getBlue() == 192) {
+            if (pxColor.getRed() == 198 && pxColor.getGreen() == 198 && pxColor.getBlue() == 198) {
                 this.ul_x = x;
                 break;
             }
@@ -76,11 +77,25 @@ public class Solver {
         // finding game boarder: y
         // loops upwards until it reaches the top gray bar
         for (int y = height / 2; y > 0; --y) {
-            pxColor = bot.getPixelColor(this.ul_x, y);
+            pxColor = this.bot.getPixelColor(this.ul_x, y);
             if (pxColor.getRed() == 128 && pxColor.getGreen() == 128 && pxColor.getBlue() == 128) {
                 this.ul_y = y + 1;
                 break;
             }
         }
+
+        // get cell side length
+        // loops starting from the upper left-hand -> until gray pixel is found
+        // counts every pixel including the gray pixel
+        int csl = 0;
+        for (int x = this.ul_x; x < width/2; ++x) {
+            pxColor = this.bot.getPixelColor(x, this.ul_y);
+            csl++;
+            if (pxColor.getRed() == 184 && pxColor.getGreen() == 184 && pxColor.getBlue() == 184) {
+                break;
+            }
+        }
+
+        this.cellWidth = csl;
     }
 }
