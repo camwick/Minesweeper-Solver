@@ -59,11 +59,12 @@ public class Solver {
         // loop right until first gray bar
         for (int x = 0; x < width / 2; ++x) {
             pxColor = this.bot.getPixelColor(x, height / 2);
-            if (pxColor.getRed() == 192 && pxColor.getGreen() == 192 && pxColor.getBlue() == 192) {
+            if (pxColor.getRed() == 198 && pxColor.getGreen() == 198 && pxColor.getBlue() == 198) {
                 this.ul_x = x;
                 break;
             }
         }
+
 
         // from gray bar, loop right until white pixel
         for (int x = this.ul_x; x < width / 2; ++x) {
@@ -84,24 +85,26 @@ public class Solver {
             }
         }
 
+
         // get cell side length
-        int ur_x = 0;
-        for (int x = width - 200; x > width / 2; --x) {
-            pxColor = this.bot.getPixelColor(x, height / 2);
-            if (pxColor.getRed() == 192 && pxColor.getGreen() == 192 && pxColor.getBlue() == 192) {
-                ur_x = x;
+        int csl = 0;
+        for (int x = this.ul_x; x < width/2; ++x) {
+            pxColor = this.bot.getPixelColor(x, this.ul_y);
+            csl++;
+            if (pxColor.getRed() == 184 && pxColor.getGreen() == 184 && pxColor.getBlue() == 184) {
                 break;
             }
         }
 
-        for (int x = ur_x; x > width / 2; --x) {
-            pxColor = this.bot.getPixelColor(x, height / 2);
-            if (pxColor.getRed() == 128 && pxColor.getGreen() == 128 && pxColor.getBlue() == 128) {
-                ur_x = x;
-                break;
-            }
-        }
+        // for (int x = ur_x; x > width / 2; --x) {
+        //     pxColor = this.bot.getPixelColor(x, height / 2);
+        //     if (pxColor.getRed() == 128 && pxColor.getGreen() == 128 && pxColor.getBlue() == 128) {
+        //         ur_x = x;
+        //         break;
+        //     }
+        // }
 
-        this.cellWidth = ((ur_x - ul_x) / 16) + 1;
+        this.cellWidth = csl;
+        
     }
 }
