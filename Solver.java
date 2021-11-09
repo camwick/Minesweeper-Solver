@@ -2,7 +2,6 @@ import java.awt.Robot;
 import java.awt.AWTException;
 import java.awt.Color;
 import java.awt.Toolkit;
-import java.awt.event.InputEvent;
 
 public class Solver {
     private Robot bot;
