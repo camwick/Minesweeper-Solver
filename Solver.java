@@ -8,7 +8,7 @@ public class Solver {
     private Board gameBoard;
     private int ul_x;
     private int ul_y;
-    private int cellWidth;
+    private int cellSideLength;
 
     public Solver(int difficulty) {
         // create bot object
@@ -77,7 +77,7 @@ public class Solver {
         // finding game boarder: y
         // loops upwards until it reaches the top gray bar
         for (int y = height / 2; y > 0; --y) {
-            pxColor = bot.getPixelColor(this.ul_x, y);
+            pxColor = this.bot.getPixelColor(this.ul_x, y);
             if (pxColor.getRed() == 128 && pxColor.getGreen() == 128 && pxColor.getBlue() == 128) {
                 this.ul_y = y + 1;
                 break;
@@ -85,6 +85,8 @@ public class Solver {
         }
 
         // get cell side length
+        // loops starting from the upper left-hand -> until gray pixel is found
+        // counts every pixel including the gray pixel
         int csl = 0;
         for (int x = this.ul_x; x < width/2; ++x) {
             pxColor = this.bot.getPixelColor(x, this.ul_y);
