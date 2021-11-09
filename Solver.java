@@ -2,12 +2,14 @@ import java.awt.Robot;
 import java.awt.AWTException;
 import java.awt.Color;
 import java.awt.Toolkit;
+import java.awt.event.InputEvent;
 
 public class Solver {
     private Robot bot;
     private Board gameBoard;
     private int ul_x;
     private int ul_y;
+    private int cellWidth;
 
     public Solver(int difficulty) {
         // create bot object
@@ -82,5 +84,25 @@ public class Solver {
                 break;
             }
         }
+
+        // get cell side length
+        int ur_x = 0;
+        for (int x = width - 200; x > width / 2; --x) {
+            pxColor = this.bot.getPixelColor(x, height / 2);
+            if (pxColor.getRed() == 192 && pxColor.getGreen() == 192 && pxColor.getBlue() == 192) {
+                ur_x = x;
+                break;
+            }
+        }
+
+        for (int x = ur_x; x > width / 2; --x) {
+            pxColor = this.bot.getPixelColor(x, height / 2);
+            if (pxColor.getRed() == 128 && pxColor.getGreen() == 128 && pxColor.getBlue() == 128) {
+                ur_x = x;
+                break;
+            }
+        }
+
+        this.cellWidth = ((ur_x - ul_x) / 16) + 1;
     }
 }
