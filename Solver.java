@@ -96,6 +96,6 @@ public class Solver {
             }
         }
 
-        this.cellWidth = csl;
+        this.cellSideLength = csl;
     }
 }
