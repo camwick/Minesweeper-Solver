@@ -8,6 +8,7 @@ public class Board {
         this.width = width;
         this.height = height;
         this.mineCount = mines;
+        this.board = new Cell[width][height];
 
         // initiate Cell objects
         for (int x = 0; x < this.height; x++) {
