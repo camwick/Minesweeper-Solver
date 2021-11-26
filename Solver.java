@@ -9,8 +9,29 @@ public class Solver {
     private int ul_x;
     private int ul_y;
     private int cellSideLength;
+    private boolean debug = false;
 
+    /**
+     * Default constructor. Calls the debugging constructor with debugging
+     * information set to false.
+     * 
+     * @param difficulty Integer corresponding to board difficulty
+     */
     public Solver(int difficulty) {
+        this(difficulty, false);
+    }
+
+    /**
+     * Constructor with debugging information.
+     * 
+     * @param difficulty Integer corresponding to board difficulty
+     * @param debug      Boolean - print debug messages and move mouse on
+     *                   calibration
+     */
+    public Solver(int difficulty, boolean debug) {
+        // set debug boolean
+        this.debug = debug;
+
         // create bot object
         try {
             this.bot = new Robot();
@@ -18,6 +39,9 @@ public class Solver {
             System.out.println(e);
             System.exit(1);
         }
+
+        if (this.debug)
+            System.out.println("Difficulty given: " + difficulty);
 
         // create board object based on difficulty
         switch (difficulty) {
@@ -58,6 +82,9 @@ public class Solver {
         // finding ul_x
         // loop right until first gray bar
         for (int x = 0; x < width / 2; ++x) {
+            if (this.debug)
+                this.bot.mouseMove(x, height / 2);
+
             pxColor = this.bot.getPixelColor(x, height / 2);
             if (pxColor.getRed() == 198 && pxColor.getGreen() == 198 && pxColor.getBlue() == 198) {
                 this.ul_x = x;
@@ -67,6 +94,9 @@ public class Solver {
 
         // from gray bar, loop right until white pixel
         for (int x = this.ul_x; x < width / 2; ++x) {
+            if (this.debug)
+                this.bot.mouseMove(x, height / 2);
+
             pxColor = this.bot.getPixelColor(x, height / 2);
             if (pxColor.getRed() == 255 && pxColor.getGreen() == 255 && pxColor.getBlue() == 255) {
                 this.ul_x = x;
@@ -77,6 +107,9 @@ public class Solver {
         // finding game boarder: y
         // loops upwards until it reaches the top gray bar
         for (int y = height / 2; y > 0; --y) {
+            if (this.debug)
+                this.bot.mouseMove(this.ul_x, y);
+
             pxColor = this.bot.getPixelColor(this.ul_x, y);
             if (pxColor.getRed() == 128 && pxColor.getGreen() == 128 && pxColor.getBlue() == 128) {
                 this.ul_y = y + 1;
@@ -84,11 +117,17 @@ public class Solver {
             }
         }
 
+        if (this.debug)
+            System.out.println("upper left corner coordinates: " + this.ul_x + ", " + this.ul_y);
+
         // get cell side length
         // loops starting from the upper left-hand -> until gray pixel is found
         // counts every pixel including the gray pixel
         int csl = 0;
-        for (int x = this.ul_x; x < width/2; ++x) {
+        for (int x = this.ul_x; x < width / 2; ++x) {
+            if (this.debug)
+                this.bot.mouseMove(x, this.ul_y);
+
             pxColor = this.bot.getPixelColor(x, this.ul_y);
             csl++;
             if (pxColor.getRed() == 184 && pxColor.getGreen() == 184 && pxColor.getBlue() == 184) {
@@ -97,5 +136,8 @@ public class Solver {
         }
 
         this.cellSideLength = csl;
+
+        if (this.debug)
+            System.out.println("Cell Side Length: " + this.cellSideLength);
     }
 }
