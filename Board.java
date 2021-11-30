@@ -4,6 +4,7 @@ public class Board {
     private int mineCount;
     private Cell[][] board;
 
+    // default constructor
     public Board(int width, int height, int mines) {
         this.width = width;
         this.height = height;
@@ -11,11 +12,19 @@ public class Board {
         this.board = new Cell[width][height];
 
         // initiate Cell objects
-        for (int x = 0; x < this.height; x++) {
-            for (int y = 0; y < this.width; y++) {
-                board[x][y] = new Cell();
+        for (int x = 0; x < this.width; x++) {
+            for (int y = 0; y < this.height; y++) {
+                this.board[x][y] = new Cell();
             }
         }
+    }
 
+    // get methods
+    public int getWidth() {
+        return this.width;
+    }
+
+    public int getHeight() {
+        return this.height;
     }
 }
