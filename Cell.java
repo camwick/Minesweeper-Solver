@@ -9,6 +9,12 @@ public class Cell{
         this.contents = x;
     }
 
+    // set methods
+    public void setContents(char newContents){
+        this.contents = newContents;
+    }
+
+    // toString
     public String toString(){
         return Character.toString(this.contents);
     }

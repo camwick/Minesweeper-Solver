@@ -215,6 +215,9 @@ public class Solver {
                 else if (px.getRed() == 128 && px.getGreen() == 128 && px.getBlue() == 128)
                     boardState += '8';
             }
+
+            // update the board
+            this.gameBoard.updateBoard(boardState);
         }
 
         // debug info
@@ -232,5 +235,10 @@ public class Solver {
                 }
             }
         }
+    }
+
+    // get methods
+    public Board getBoard() {
+        return this.gameBoard;
     }
 }

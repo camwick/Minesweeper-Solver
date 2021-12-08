@@ -19,6 +19,19 @@ public class Board {
         }
     }
 
+    /**
+     * Update board object to match screen.
+     * 
+     * @param boardKey String representing actual minesweeper board
+     */
+    public void updateBoard(String boardKey) {
+        for (int y = 0; y < this.board.length; ++y) {
+            for (int x = 0; x < this.board[y].length; ++x) {
+                this.board[y][x].setContents(boardKey.charAt(this.board[y].length * y + x));
+            }
+        }
+    }
+
     // get methods
     public int getWidth() {
         return this.width;
@@ -26,5 +39,21 @@ public class Board {
 
     public int getHeight() {
         return this.height;
+    }
+
+    /**
+     * Outputs a string of a board object in a pretty fasion :)
+     */
+    public String toString() {
+        String output = "";
+
+        for (Cell[] cells : this.board) {
+            for (Cell cell : cells) {
+                output += cell + " ";
+            }
+            output += "\n";
+        }
+
+        return output;
     }
 }
