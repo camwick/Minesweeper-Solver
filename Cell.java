@@ -31,6 +31,7 @@ public class Cell {
     /**
      * Returns the contents of the cell.
      */
+    @Override
     public String toString() {
         return Character.toString(this.contents);
     }
