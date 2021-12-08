@@ -4,7 +4,14 @@ public class Board {
     private int mineCount;
     private Cell[][] board;
 
-    // default constructor
+    /**
+     * Default constuctor.
+     * Constructs 2-D board object
+     * 
+     * @param width  int, board width
+     * @param height int, board height
+     * @param mines  int, amount of mines in board
+     */
     public Board(int width, int height, int mines) {
         this.width = width;
         this.height = height;
@@ -32,11 +39,20 @@ public class Board {
         }
     }
 
-    // get methods
+    /**
+     * Get width of board object
+     * 
+     * @return int, width of board
+     */
     public int getWidth() {
         return this.width;
     }
 
+    /**
+     * Get height of board object
+     * 
+     * @return int, height of board
+     */
     public int getHeight() {
         return this.height;
     }

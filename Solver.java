@@ -237,7 +237,11 @@ public class Solver {
         }
     }
 
-    // get methods
+    /**
+     * Get board object
+     * 
+     * @return board
+     */
     public Board getBoard() {
         return this.gameBoard;
     }

@@ -1,21 +1,37 @@
-public class Cell{
+public class Cell {
     private char contents;
 
-    public Cell(){
+    /**
+     * Default constructor.
+     * Constructs Cell object with default content of 'U'.
+     */
+    public Cell() {
         this.contents = 'U';
     }
 
-    public Cell(char x){
+    /**
+     * Constructor.
+     * Constructs Cell object with specified contents <code>x</code>
+     * 
+     * @param x char, contents of Cell
+     */
+    public Cell(char x) {
         this.contents = x;
     }
 
-    // set methods
-    public void setContents(char newContents){
+    /**
+     * Set contents variable.
+     * 
+     * @param newContents char, new Cell contents
+     */
+    public void setContents(char newContents) {
         this.contents = newContents;
     }
 
-    // toString
-    public String toString(){
+    /**
+     * Returns the contents of the cell.
+     */
+    public String toString() {
         return Character.toString(this.contents);
     }
 }
