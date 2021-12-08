@@ -34,7 +34,7 @@ public class Board {
     public void updateBoard(String boardKey) {
         for (int y = 0; y < this.board.length; ++y) {
             for (int x = 0; x < this.board[y].length; ++x) {
-                this.board[y][x].setContents(boardKey.charAt(this.board[y].length * y + x));
+                this.board[y][x].setContents(boardKey.charAt((this.board[y].length * y) + x));
             }
         }
     }
@@ -60,6 +60,7 @@ public class Board {
     /**
      * Outputs a string of a board object in a pretty fasion :)
      */
+    @Override
     public String toString() {
         String output = "";
 
