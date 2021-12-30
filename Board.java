@@ -1,8 +1,10 @@
+import javax.swing.event.CellEditorListener;
+
 public class Board {
     private final int width;
     private final int height;
     private int mineCount;
-    private Cell[][] board;
+    private Cell[] board;
 
     /**
      * Default constuctor.
@@ -16,14 +18,67 @@ public class Board {
         this.width = width;
         this.height = height;
         this.mineCount = mines;
-        this.board = new Cell[width][height];
+        this.board = new Cell[width * height];
 
         // initiate Cell objects
-        for (int x = 0; x < this.width; x++) {
-            for (int y = 0; y < this.height; y++) {
-                this.board[x][y] = new Cell();
-            }
+        for (int i = 0; i < this.width * this.height; i++) {
+            this.board[i] = new Cell();
         }
+    }
+
+    // set board object's adjacent cells
+    public void setBoardAdjacents() {
+        Cell[] adjacent = new Cell[8];
+
+        // ul corner
+        int index = 0;
+        for (int i = 0; i < 4; ++i) {
+            if (i >= 0 || i <= 3)
+                adjacent[i] = null;
+        }
+        adjacent[4] = this.board[index + 1];
+        adjacent[5] = null;
+        adjacent[6] = this.board[index + this.width];
+        adjacent[7] = this.board[index + this.width + 1];
+        this.board[index].setAdjacent(adjacent);
+
+        // ur corner
+        index = this.width - 1;
+        for (int i = 0; i < 3; ++i) {
+            if (i >= 0 || i <= 2)
+                adjacent[i] = null;
+        }
+        adjacent[3] = this.board[index - 1];
+        adjacent[4] = null;
+        adjacent[5] = this.board[index + this.width - 1];
+        adjacent[6] = this.board[index + this.width];
+        adjacent[7] = null;
+        this.board[index].setAdjacent(adjacent);
+
+        // ll
+        index = (this.width * (this.height - 1));
+        adjacent[0] = null;
+        adjacent[1] = this.board[index - this.width];
+        adjacent[2] = this.board[index - this.width + 1];
+        adjacent[3] = null;
+        adjacent[4] = this.board[index + 1];
+        for (int i = 5; i < 8; ++i) {
+            if (i >= 5 || i <= 7)
+                adjacent[i] = null;
+        }
+        this.board[index].setAdjacent(adjacent);
+
+        // lr
+        index = this.width * this.height - 1;
+        adjacent[0] = this.board[index - this.width - 1];
+        adjacent[1] = this.board[index - this.width];
+        adjacent[2] = null;
+        adjacent[3] = this.board[index - 1];
+        for (int i = 4; i < 8; ++i) {
+            if (i >= 4 || i <= 7)
+                adjacent[i] = null;
+        }
+        this.board[index].setAdjacent(adjacent);
     }
 
     /**
@@ -32,10 +87,8 @@ public class Board {
      * @param boardKey String representing actual minesweeper board
      */
     public void updateBoard(String boardKey) {
-        for (int y = 0; y < this.board.length; ++y) {
-            for (int x = 0; x < this.board[y].length; ++x) {
-                this.board[y][x].setContents(boardKey.charAt((this.board[y].length * y) + x));
-            }
+        for (int i = 0; i < this.board.length; ++i) {
+            this.board[i].setContents(boardKey.charAt(i));
         }
     }
 
@@ -64,11 +117,11 @@ public class Board {
     public String toString() {
         String output = "";
 
-        for (Cell[] cells : this.board) {
-            for (Cell cell : cells) {
-                output += cell + " ";
-            }
-            output += "\n";
+        for (int i = 0; i < this.board.length; ++i) {
+            if (i % this.width == 0)
+                output += "\n";
+
+            output += this.board[i] + " ";
         }
 
         return output;
