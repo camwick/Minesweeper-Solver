@@ -71,6 +71,9 @@ public class Solver {
 
         // get initial board state
         syncBoard(false);
+
+        // set adjacent cells
+        this.gameBoard.setBoardAdjacents();
     }
 
     /**
@@ -232,12 +235,12 @@ public class Solver {
         if (this.debug) {
             int counter = 0;
             for (int i = 0; i < boardState.length(); ++i) {
-                if (counter <= 30) {
+                if (counter <= this.gameBoard.getHeight()) {
                     System.out.print(boardState.charAt(i));
                     counter++;
                 }
 
-                if (counter == 30) {
+                if (counter == this.gameBoard.getWidth()) {
                     System.out.println("");
                     counter = 0;
                 }
