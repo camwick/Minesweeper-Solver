@@ -79,6 +79,137 @@ public class Board {
                 adjacent[i] = null;
         }
         this.board[index].setAdjacent(adjacent);
+
+        //Find the top of the board and set the adjacents
+        //  The top of the board will be the indexes between 0 and (width-2)
+        
+        for(int i = 1; i < this.width-1;++i)
+        {
+            
+            //each index at the top of the board will have adjacent cells in surrounding locations 3-7 
+            for(int j = 0; j < 8; ++j)
+            {
+                
+                if(j < 3){
+                    adjacent[j] = null;
+                }
+                else if(j == 3){
+                    adjacent[j] = this.board[i-1];
+                    
+                }
+                else if(j == 4)
+                {
+                    adjacent[j] = this.board[i+1];
+                }
+                else
+                {
+                    adjacent[j] = this.board[i+this.width-1+(j-5)];
+                }
+                    
+            }
+            this.board[i].setAdjacent(adjacent);   
+        }
+        
+        //Find the bottom of the board and set the adjacents
+        //  The bottom of the board will be the indexes between (height-1)
+        for(int i = (this.height-1)*this.width+1; i <= (this.width*this.height)-2;++i)
+        {
+            
+            for(int j = 0; j < 8; ++j)
+            {
+                if(j<3)
+                {
+                    adjacent[j] = this.board[i-this.width-1+j];
+                    
+                }
+                else if(j==3)
+                {
+                    adjacent[j] = this.board[i-1];
+                    
+                }
+                else if(j==4)
+                {
+                    adjacent[j] = this.board[i+1];
+                    
+                }
+                else{
+                    adjacent[j] = null;
+                }
+                
+            }
+            this.board[i].setAdjacent(adjacent);
+        }
+
+        //Find the lefthand side of the board and set the adjacents
+        
+        for(int i = this.width; i <= this.width*(this.height-2);i = i + this.width)
+        {
+            for(int j = 0; j < 8; ++j)
+            {
+                if(j == 0||j==3||j==5)
+                {
+                    adjacent[j] = null;
+                }
+                else if(j < 3)
+                {
+                    adjacent[j] = this.board[i-this.width+j-1];
+                }
+                else if(j == 4)
+                {
+                    adjacent[j] = this.board[i+1];
+                    
+                }
+                else if(j == 6){
+                    adjacent[j] = this.board[i+this.width];
+                }
+                else if(j==7)
+                {
+                    adjacent[j] = this.board[i+this.width+1]; 
+                }
+            }
+            this.board[i].setAdjacent(adjacent);
+            
+        }
+
+        //Find the righthand side of the board and set the adjacents
+        
+        for(int i = (this.width-1)+this.width; i <= (this.width*this.height-1)-this.width; i = i+this.width)
+        {
+            
+            for(int j = 0; j < 8; j++)
+            {
+                if(j==2||j==4||j==7)
+                {
+                    adjacent[j] = null;
+                    
+                }
+                else if(j < 2)
+                {
+                    adjacent[j] = this.board[i-this.width-1+j];
+                    
+                }
+                else if(j == 3)
+                {
+                    adjacent[j] = this.board[i-1];
+                    
+                }
+                else if(j==5){
+                    adjacent[j] = this.board[i+this.width-1];
+                    
+                }
+                else if(j==6)
+                {
+                    adjacent[j] = this.board[i+this.width];
+                    
+                }
+                
+            }
+            this.board[i].setAdjacent(adjacent);
+            
+        }
+
+        //Set the adjacents for every square in the inside of the board
+
     }
 
     /**
