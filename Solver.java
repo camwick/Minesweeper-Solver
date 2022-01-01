@@ -2,6 +2,7 @@ import java.awt.Robot;
 import java.awt.AWTException;
 import java.awt.Color;
 import java.awt.Toolkit;
+import java.awt.event.InputEvent;
 
 public class Solver {
     private Robot bot;
@@ -13,23 +14,13 @@ public class Solver {
     private int[] startCoord = new int[2];
 
     /**
-     * Default constructor. Calls the debugging constructor with debugging
-     * information set to false.
-     * 
-     * @param difficulty Integer corresponding to board difficulty
-     */
-    public Solver(int difficulty) {
-        this(difficulty, false);
-    }
-
-    /**
      * Constructor with debugging information.
      * 
      * @param difficulty Integer corresponding to board difficulty
      * @param debug      Boolean - print debug messages and move mouse on
      *                   calibration
      */
-    public Solver(int difficulty, boolean debug) {
+    public Solver(int difficulty, boolean debug, int width, int height, int mineCount) {
         // set debug boolean
         this.debug = debug;
 
@@ -58,6 +49,9 @@ public class Solver {
             case 4: // evil
                 this.gameBoard = new Board(30, 20, 130);
                 break;
+            case 5: // custom
+                this.gameBoard = new Board(width, height, mineCount);
+                break;
             default: // invalid difficulty
                 System.out.println("Invalid difficulty entered: " + difficulty);
                 System.exit(1);
@@ -70,10 +64,15 @@ public class Solver {
         System.out.println("Board calibrated.");
 
         // get initial board state
-        syncBoard(false);
+        syncBoard(true);
 
         // set adjacent cells
         this.gameBoard.setBoardAdjacents();
+
+        // make first move
+        this.bot.mouseMove(startCoord[0], startCoord[1]);
+        this.bot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
+        this.bot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
     }
 
     /**
