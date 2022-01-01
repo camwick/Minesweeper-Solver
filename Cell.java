@@ -22,6 +22,11 @@ public class Cell {
         this.adjacentCells = new Cell[8];
     }
 
+    /**
+     * Returns the adjacentCells object
+     * 
+     * @return adjacentCells array
+     */
     public Cell[] getAdjacent() {
         return this.adjacentCells;
     }
@@ -35,6 +40,11 @@ public class Cell {
         this.contents = newContents;
     }
 
+    /**
+     * Sets every adjacent cell. Null = edge cases.
+     * 
+     * @param x Cell array, cells to be set as adjacents.
+     */
     public void setAdjacent(Cell[] x) {
         for (int i = 0; i < x.length; ++i) {
             this.adjacentCells[i] = x[i];

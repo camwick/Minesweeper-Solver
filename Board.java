@@ -26,7 +26,12 @@ public class Board {
         }
     }
 
-    // set board object's adjacent cells
+    /**
+     * Set board object's adjacent cells.
+     * 
+     * Loops through entire this.board and sets every cell's adjacent adjacentCell
+     * array to the correct cells.
+     */
     public void setBoardAdjacents() {
         Cell[] adjacent = new Cell[8];
 
@@ -80,169 +85,104 @@ public class Board {
         }
         this.board[index].setAdjacent(adjacent);
 
-        //Find the top of the board and set the adjacents
-        //  The top of the board will be the indexes between 0 and (width-2)
-        
-        for(int i = 1; i < this.width-1;++i)
-        {
-            
-            //each index at the top of the board will have adjacent cells in surrounding locations 3-7 
-            for(int j = 0; j < 8; ++j)
-            {
-                
-                if(j < 3){
+        // Find the top of the board and set the adjacents
+        // The top of the board will be the indexes between 0 and (width-2)
+        for (int i = 1; i < this.width - 1; ++i) {
+            // each index at the top of the board will have adjacent cells in surrounding
+            // locations 3-7
+            for (int j = 0; j < 8; ++j) {
+                if (j < 3) {
                     adjacent[j] = null;
+                } else if (j == 3) {
+                    adjacent[j] = this.board[i - 1];
+
+                } else if (j == 4) {
+                    adjacent[j] = this.board[i + 1];
+                } else {
+                    adjacent[j] = this.board[i + this.width - 1 + (j - 5)];
                 }
-                else if(j == 3){
-                    adjacent[j] = this.board[i-1];
-                    
-                }
-                else if(j == 4)
-                {
-                    adjacent[j] = this.board[i+1];
-                }
-                else
-                {
-                    adjacent[j] = this.board[i+this.width-1+(j-5)];
-                }
-                    
-            }
-            this.board[i].setAdjacent(adjacent);   
-        }
-        
-        //Find the bottom of the board and set the adjacents
-        //  The bottom of the board will be the indexes between (height-1)
-        for(int i = (this.height-1)*this.width+1; i <= (this.width*this.height)-2;++i)
-        {
-            
-            for(int j = 0; j < 8; ++j)
-            {
-                if(j<3)
-                {
-                    adjacent[j] = this.board[i-this.width-1+j];
-                    
-                }
-                else if(j==3)
-                {
-                    adjacent[j] = this.board[i-1];
-                    
-                }
-                else if(j==4)
-                {
-                    adjacent[j] = this.board[i+1];
-                    
-                }
-                else{
-                    adjacent[j] = null;
-                }
-                
             }
             this.board[i].setAdjacent(adjacent);
         }
 
-        //Find the lefthand side of the board and set the adjacents
-        
-        for(int i = this.width; i <= this.width*(this.height-2);i = i + this.width)
-        {
-            for(int j = 0; j < 8; ++j)
-            {
-                if(j == 0||j==3||j==5)
-                {
+        // Find the bottom of the board and set the adjacents
+        // The bottom of the board will be the indexes between (height-1) to (this.width
+        // * this.height) - 2
+        for (int i = (this.height - 1) * this.width + 1; i <= (this.width * this.height) - 2; ++i) {
+            for (int j = 0; j < 8; ++j) {
+                if (j < 3) {
+                    adjacent[j] = this.board[i - this.width - 1 + j];
+                } else if (j == 3) {
+                    adjacent[j] = this.board[i - 1];
+                } else if (j == 4) {
+                    adjacent[j] = this.board[i + 1];
+                } else {
                     adjacent[j] = null;
-                }
-                else if(j < 3)
-                {
-                    adjacent[j] = this.board[i-this.width+j-1];
-                }
-                else if(j == 4)
-                {
-                    adjacent[j] = this.board[i+1];
-                    
-                }
-                else if(j == 6){
-                    adjacent[j] = this.board[i+this.width];
-                }
-                else if(j==7)
-                {
-                    adjacent[j] = this.board[i+this.width+1]; 
                 }
             }
             this.board[i].setAdjacent(adjacent);
-            
         }
 
-        //Find the righthand side of the board and set the adjacents
-        
-        for(int i = (this.width-1)+this.width; i <= (this.width*this.height-1)-this.width; i = i+this.width)
-        {
-            
-            for(int j = 0; j < 8; j++)
-            {
-                if(j==2||j==4||j==7)
-                {
+        // Find the lefthand side of the board and set the adjacents
+        for (int i = this.width; i <= this.width * (this.height - 2); i = i + this.width) {
+            for (int j = 0; j < 8; ++j) {
+                if (j == 0 || j == 3 || j == 5) {
                     adjacent[j] = null;
-                    
+                } else if (j < 3) {
+                    adjacent[j] = this.board[i - this.width + j - 1];
+                } else if (j == 4) {
+                    adjacent[j] = this.board[i + 1];
+                } else if (j == 6) {
+                    adjacent[j] = this.board[i + this.width];
+                } else if (j == 7) {
+                    adjacent[j] = this.board[i + this.width + 1];
                 }
-                else if(j < 2)
-                {
-                    adjacent[j] = this.board[i-this.width-1+j];
-                    
-                }
-                else if(j == 3)
-                {
-                    adjacent[j] = this.board[i-1];
-                    
-                }
-                else if(j==5){
-                    adjacent[j] = this.board[i+this.width-1];
-                    
-                }
-                else if(j==6)
-                {
-                    adjacent[j] = this.board[i+this.width];
-                    
-                }
-                
             }
             this.board[i].setAdjacent(adjacent);
-            
         }
-        
-        //Set the adjacents for every square in the inside of the board
+
+        // Find the righthand side of the board and set the adjacents
+        for (int i = (this.width - 1) + this.width; i <= (this.width * this.height - 1) - this.width; i = i
+                + this.width) {
+            for (int j = 0; j < 8; j++) {
+                if (j == 2 || j == 4 || j == 7) {
+                    adjacent[j] = null;
+                } else if (j < 2) {
+                    adjacent[j] = this.board[i - this.width - 1 + j];
+                } else if (j == 3) {
+                    adjacent[j] = this.board[i - 1];
+                } else if (j == 5) {
+                    adjacent[j] = this.board[i + this.width - 1];
+                } else if (j == 6) {
+                    adjacent[j] = this.board[i + this.width];
+                }
+            }
+            this.board[i].setAdjacent(adjacent);
+        }
+
+        // Set the adjacents for every square in the inside of the board
         int row = 2;
-        for(int i = this.width + 1; i <= (this.width*this.height-2)-this.width;++i)
-        {
-            //Move the index to the next row
-            for(int j = 0; j < 8; ++j)
-            {
-                if(j<=2)
-                {
-                    adjacent[j] = this.board[i-this.width-1+j];
-                }
-                else if(j == 3)
-                {
-                    adjacent[j] = this.board[i-1];
-                }
-                else if(j == 4)
-                {
-                    adjacent[j] = this.board[i+1];
-                }
-                else
-                {
-                    //j == 5 || 6 || 7
-                    adjacent[j] = this.board[i+this.width-1+j-5];
+        for (int i = this.width + 1; i <= (this.width * this.height - 2) - this.width; ++i) {
+            // Move the index to the next row
+            for (int j = 0; j < 8; ++j) {
+                if (j <= 2) {
+                    adjacent[j] = this.board[i - this.width - 1 + j];
+                } else if (j == 3) {
+                    adjacent[j] = this.board[i - 1];
+                } else if (j == 4) {
+                    adjacent[j] = this.board[i + 1];
+                } else {
+                    // j == 5 || 6 || 7
+                    adjacent[j] = this.board[i + this.width - 1 + j - 5];
                 }
             }
-            if(i % (row * this.width - 2) == 0)
-            {
+            if (i % (row * this.width - 2) == 0) {
                 ++row;
                 i = i + 2;
                 continue;
             }
             this.board[i].setAdjacent(adjacent);
-
         }
-        
     }
 
     /**
