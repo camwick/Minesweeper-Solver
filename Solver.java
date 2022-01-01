@@ -66,18 +66,21 @@ public class Solver {
 
         // get upper left-hand corner of game board
         System.out.println("Starting board calibration...\nPlease wait the few seconds this will take.");
-        calibrateUpperCorner();
+        calibrateBoard();
         System.out.println("Board calibrated.");
 
         // get initial board state
-        calibrateBoard(true);
+        syncBoard(false);
+
+        // set adjacent cells
+        this.gameBoard.setBoardAdjacents();
     }
 
     /**
      * Finds the upper left-hand of the game board. Position found is the first
      * pixel of the Cell array.
      */
-    private void calibrateUpperCorner() {
+    private void calibrateBoard() {
         // declaring variables
         Color pxColor;
         int width = (int) Toolkit.getDefaultToolkit().getScreenSize().getWidth();
@@ -151,7 +154,7 @@ public class Solver {
      * 
      * @param start If true, save the coordinates of the green X
      */
-    private void calibrateBoard(boolean start) {
+    private void syncBoard(boolean start) {
         // x and y coordinates of the middle of the first cell
         int centerX = this.ul_x + (this.cellSideLength / 2);
         int centerY = this.ul_y + (this.cellSideLength / 2);
@@ -168,69 +171,90 @@ public class Solver {
                 Color px = this.bot.getPixelColor(centerX + (x * this.cellSideLength),
                         centerY + (y * this.cellSideLength));
 
-                // grabs coordinates of starting green X
-                if (start && px.getRed() == 0 && px.getGreen() == 128 && px.getBlue() == 0) {
-                    this.startCoord[0] = centerX + (x * this.cellSideLength);
-                    this.startCoord[1] = centerY + (y * this.cellSideLength);
-                    boardState += 'S';
-                }
+                // distinguish between finding starting green x or not
+                if (start) {
+                    // start means everything is unclicked except for a single green x cell... we'll
+                    // mark this cell
 
-                // grabs gray pixels
-                if (px.getRed() == 198 && px.getGreen() == 198 && px.getBlue() == 198) {
-                    px = this.bot.getPixelColor(centerX + (x * this.cellSideLength) - (this.cellSideLength / 2),
-                            centerY + (y * this.cellSideLength));
-
-                    // if the cell has a white pixel ... unclicked cell
-                    if (px.equals(Color.WHITE))
+                    if (px.getRed() == 0 && px.getGreen() == 128 && px.getBlue() == 0) {
+                        this.startCoord[0] = centerX + (x * this.cellSideLength);
+                        this.startCoord[1] = centerY + (y * this.cellSideLength);
+                        boardState += 'S';
+                    } else
                         boardState += 'U';
-                    else // empty cell with no white pixel
-                        boardState += 'E';
+                } else {
+                    // start = false
+                    // board will consist of more than just unclicked cells and won't have a green x
 
+                    // grabs gray pixels
+                    if (px.getRed() == 198 && px.getGreen() == 198 && px.getBlue() == 198) {
+                        px = this.bot.getPixelColor(centerX + (x * this.cellSideLength) - (this.cellSideLength / 2),
+                                centerY + (y * this.cellSideLength));
+
+                        // if the cell has a white pixel ... unclicked cell
+                        if (px.equals(Color.WHITE))
+                            boardState += 'U';
+                        else // empty cell with no white pixel
+                            boardState += 'E';
+                    }
+                    // different shade of gray == flag
+                    else if (px.getRed() == 168 && px.getGreen() == 168 && px.getBlue() == 168)
+                        boardState += 'F';
+                    // blue pixel == 1
+                    else if (px.getBlue() == 255 && px.getRed() == 0 && px.getGreen() == 0)
+                        boardState += '1';
+                    // green pixel == 2
+                    else if (px.getGreen() == 128 && px.getRed() == 0 && px.getBlue() == 0)
+                        boardState += '2';
+                    // red pixel == 3
+                    else if (px.getRed() == 255 && px.getGreen() == 0 && px.getBlue() == 0)
+                        boardState += '3';
+                    // dark blue pixel == 4
+                    else if (px.getBlue() == 128 && px.getRed() == 0 && px.getGreen() == 0)
+                        boardState += '4';
+                    // maroon pixel == 5
+                    else if (px.getRed() == 128 && px.getGreen() == 0 && px.getBlue() == 0)
+                        boardState += '5';
+                    // turqoise pixel == 6
+                    else if (px.getGreen() == 128 && px.getRed() == 0 && px.getBlue() == 128)
+                        boardState += '6';
+                    // black pixel == 7
+                    else if (px.getRed() == 0 && px.getGreen() == 0 && px.getBlue() == 0)
+                        boardState += '7';
+                    // light gray pixel == 8
+                    else if (px.getRed() == 128 && px.getGreen() == 128 && px.getBlue() == 128)
+                        boardState += '8';
                 }
-                // different shade of gray == flag
-                else if (px.getRed() == 168 && px.getGreen() == 168 && px.getBlue() == 168)
-                    boardState += 'F';
-                // blue pixel == 1
-                else if (px.getBlue() == 255 && px.getRed() == 0 && px.getGreen() == 0)
-                    boardState += '1';
-                // green pixel == 2
-                else if (px.getGreen() == 128 && px.getRed() == 0 && px.getBlue() == 0)
-                    boardState += '2';
-                // red pixel == 3
-                else if (px.getRed() == 255 && px.getGreen() == 0 && px.getBlue() == 0)
-                    boardState += '3';
-                // dark blue pixel == 4
-                else if (px.getBlue() == 128 && px.getRed() == 0 && px.getGreen() == 0)
-                    boardState += '4';
-                // maroon pixel == 5
-                else if (px.getRed() == 128 && px.getGreen() == 0 && px.getBlue() == 0)
-                    boardState += '5';
-                // turqoise pixel == 6
-                else if (px.getGreen() == 128 && px.getRed() == 0 && px.getBlue() == 128)
-                    boardState += '6';
-                // black pixel == 7
-                else if (px.getRed() == 0 && px.getGreen() == 0 && px.getBlue() == 0)
-                    boardState += '7';
-                // light gray pixel == 8
-                else if (px.getRed() == 128 && px.getGreen() == 128 && px.getBlue() == 128)
-                    boardState += '8';
             }
         }
+
+        // update the board
+        this.gameBoard.updateBoard(boardState);
 
         // debug info
         if (this.debug) {
             int counter = 0;
             for (int i = 0; i < boardState.length(); ++i) {
-                if (counter <= 30) {
+                if (counter <= this.gameBoard.getHeight()) {
                     System.out.print(boardState.charAt(i));
                     counter++;
                 }
 
-                if (counter == 30) {
+                if (counter == this.gameBoard.getWidth()) {
                     System.out.println("");
                     counter = 0;
                 }
             }
+            System.out.println("");
         }
+    }
+
+    /**
+     * Get board object
+     * 
+     * @return board
+     */
+    public Board getBoard() {
+        return this.gameBoard;
     }
 }
