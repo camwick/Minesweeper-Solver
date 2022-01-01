@@ -207,9 +207,42 @@ public class Board {
             this.board[i].setAdjacent(adjacent);
             
         }
-
+        
         //Set the adjacents for every square in the inside of the board
+        int row = 2;
+        for(int i = this.width + 1; i <= (this.width*this.height-2)-this.width;++i)
+        {
+            //Move the index to the next row
+            for(int j = 0; j < 8; ++j)
+            {
+                if(j<=2)
+                {
+                    adjacent[j] = this.board[i-this.width-1+j];
+                }
+                else if(j == 3)
+                {
+                    adjacent[j] = this.board[i-1];
+                }
+                else if(j == 4)
+                {
+                    adjacent[j] = this.board[i+1];
+                }
+                else
+                {
+                    //j == 5 || 6 || 7
+                    adjacent[j] = this.board[i+this.width-1+j-5];
+                }
+            }
+            if(i % (row * this.width - 2) == 0)
+            {
+                ++row;
+                i = i + 2;
+                continue;
+            }
+            this.board[i].setAdjacent(adjacent);
 
+        }
+        
     }
 
     /**
