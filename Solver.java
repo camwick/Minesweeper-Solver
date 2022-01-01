@@ -197,9 +197,6 @@ public class Solver {
                         else // empty cell with no white pixel
                             boardState += 'E';
                     }
-                    // different shade of gray == flag
-                    else if (px.getRed() == 168 && px.getGreen() == 168 && px.getBlue() == 168)
-                        boardState += 'F';
                     // blue pixel == 1
                     else if (px.getBlue() == 255 && px.getRed() == 0 && px.getGreen() == 0)
                         boardState += '1';
@@ -224,6 +221,9 @@ public class Solver {
                     // light gray pixel == 8
                     else if (px.getRed() == 128 && px.getGreen() == 128 && px.getBlue() == 128)
                         boardState += '8';
+                    // different shade of gray == flag
+                    else
+                        boardState += 'F';
                 }
             }
         }
