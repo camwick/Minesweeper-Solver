@@ -73,6 +73,9 @@ public class Solver {
         this.bot.mouseMove(startCoord[0], startCoord[1]);
         this.bot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
         this.bot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
+
+        // update board
+        syncBoard(false);
     }
 
     /**
@@ -161,10 +164,16 @@ public class Solver {
         // loop through entire board on screen
         // check center of cell's pixel color and create a String based on those colors
         String boardState = "";
+        int[] xCoord = new int[this.gameBoard.getSize()];
+        int[] yCoord = new int[this.gameBoard.getSize()];
         for (int y = 0; y < this.gameBoard.getHeight(); ++y) {
             for (int x = 0; x < this.gameBoard.getWidth(); ++x) {
                 if (this.debug)
                     this.bot.mouseMove(centerX + (x * this.cellSideLength), centerY + (y * this.cellSideLength));
+
+                // set x and y coordinates of invidiual cells
+                xCoord[y * this.gameBoard.getHeight() + x] = centerX + (x * this.cellSideLength);
+                yCoord[y * this.gameBoard.getHeight() + x] = centerY + (y * this.cellSideLength);
 
                 // color of center of cell
                 Color px = this.bot.getPixelColor(centerX + (x * this.cellSideLength),
@@ -227,24 +236,30 @@ public class Solver {
             }
         }
 
+        // set x and y cell coordinates
+        for (int i = 0; i < this.gameBoard.getSize(); ++i) {
+            this.gameBoard.getCellAtIndex(i).setCoords(xCoord[i], yCoord[i]);
+        }
+
         // update the board
         this.gameBoard.updateBoard(boardState);
 
         // debug info
         if (this.debug) {
-            int counter = 0;
-            for (int i = 0; i < boardState.length(); ++i) {
-                if (counter <= this.gameBoard.getHeight()) {
-                    System.out.print(boardState.charAt(i));
-                    counter++;
-                }
+            // int counter = 0;
+            // for (int i = 0; i < boardState.length(); ++i) {
+            // if (counter <= this.gameBoard.getHeight()) {
+            // System.out.print(boardState.charAt(i));
+            // counter++;
+            // }
 
-                if (counter == this.gameBoard.getWidth()) {
-                    System.out.println("");
-                    counter = 0;
-                }
-            }
-            System.out.println("");
+            // if (counter == this.gameBoard.getWidth()) {
+            // System.out.println("");
+            // counter = 0;
+            // }
+            // }
+            // System.out.println("");
+            System.out.println(this.gameBoard);
         }
     }
 
@@ -255,5 +270,60 @@ public class Solver {
      */
     public Board getBoard() {
         return this.gameBoard;
+    }
+
+    public void solve() {
+        boolean run = false;
+        do {
+            // marks basic flags
+            for (int i = 0; i < this.gameBoard.getSize(); ++i) {
+                // variables
+                Cell cell = this.gameBoard.getCellAtIndex(i);
+                char cellContents = cell.getContents();
+
+                // skip empty/unclicked cells
+                if (cellContents == 'E' || cellContents == 'U')
+                    continue;
+
+                // marks flags
+                Cell[] adjacent = cell.getAdjacent();
+                if (cell.getNumUnlickedAdj() == Character.getNumericValue(cellContents)) {
+
+                    for (int j = 0; j < adjacent.length; ++j) {
+                        if (adjacent[j] == null)
+                            continue;
+
+                        if (adjacent[j].getContents() == 'U')
+                            adjacent[j].setContents('F');
+                    }
+                }
+
+                if (this.debug)
+                    System.out.println(this.gameBoard);
+
+                // make moves
+                if (cell.getAdjFlags() == Character.getNumericValue(cellContents)) {
+                    System.out.println("hit1");
+                    for (int j = 0; j < adjacent.length; ++j) {
+                        if (adjacent[j] == null)
+                            continue;
+
+                        if (adjacent[j].getContents() == 'U') {
+                            System.out.println("hit2");
+                            this.bot.mouseMove(adjacent[j].getXCoord(), adjacent[j].getYCoord());
+                            this.bot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
+                            this.bot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
+                        }
+                    }
+                }
+
+                // System.out.println("Syncing board...");
+                // syncBoard(false);
+                // System.out.println("Board synced.\n");
+
+                if (this.debug)
+                    System.out.println(this.gameBoard);
+            }
+        } while (run);
     }
 }

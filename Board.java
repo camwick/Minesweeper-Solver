@@ -26,6 +26,14 @@ public class Board {
         }
     }
 
+    public int getSize() {
+        return this.board.length;
+    }
+
+    public Cell getCellAtIndex(int index) {
+        return this.board[index];
+    }
+
     /**
      * Set board object's adjacent cells.
      * 

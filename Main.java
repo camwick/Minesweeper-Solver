@@ -38,5 +38,8 @@ public class Main {
 
     // create solver object
     Solver game = new Solver(difficulty, debug, width, height, mineCount);
+
+    // start solving
+    game.solve();
   }
 }
