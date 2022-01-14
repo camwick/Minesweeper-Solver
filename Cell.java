@@ -43,7 +43,7 @@ public class Cell {
             if (adjacentCells[i] == null)
                 continue;
 
-            if (adjacentCells[i].getContents() == 'U')
+            if (adjacentCells[i].getContents() == 'U' || adjacentCells[i].getContents() == 'F')
                 count++;
         }
         return count;

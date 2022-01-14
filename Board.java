@@ -5,6 +5,7 @@ public class Board {
     private final int height;
     private int mineCount;
     private Cell[] board;
+    private int unclicked;
 
     /**
      * Default constuctor.
@@ -17,6 +18,7 @@ public class Board {
     public Board(int width, int height, int mines) {
         this.width = width;
         this.height = height;
+        this.unclicked = width * height;
         this.mineCount = mines;
         this.board = new Cell[width * height];
 
@@ -32,6 +34,14 @@ public class Board {
 
     public Cell getCellAtIndex(int index) {
         return this.board[index];
+    }
+
+    public void setNumOfUnclicked(int unclicked){
+        this.unclicked = unclicked;
+    }
+
+    public int getUnclicked(){
+        return this.unclicked;
     }
 
     /**

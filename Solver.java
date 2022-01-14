@@ -19,8 +19,9 @@ public class Solver {
      * @param difficulty Integer corresponding to board difficulty
      * @param debug      Boolean - print debug messages and move mouse on
      *                   calibration
+     * @throws InterruptedException
      */
-    public Solver(int difficulty, boolean debug, int width, int height, int mineCount) {
+    public Solver(int difficulty, boolean debug, int width, int height, int mineCount) throws InterruptedException {
         // set debug boolean
         this.debug = debug;
 
@@ -73,6 +74,7 @@ public class Solver {
         this.bot.mouseMove(startCoord[0], startCoord[1]);
         this.bot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
         this.bot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
+        Thread.sleep(500);
 
         // update board
         syncBoard(false);
@@ -274,6 +276,8 @@ public class Solver {
 
     public void solve() {
         boolean run = false;
+        int numOfFlags = 0;
+        int numOfMoves = 0;
         do {
             // marks basic flags
             for (int i = 0; i < this.gameBoard.getSize(); ++i) {
@@ -293,37 +297,58 @@ public class Solver {
                         if (adjacent[j] == null)
                             continue;
 
-                        if (adjacent[j].getContents() == 'U')
+                        if (adjacent[j].getContents() == 'U'){
                             adjacent[j].setContents('F');
-                    }
-                }
-
-                if (this.debug)
-                    System.out.println(this.gameBoard);
-
-                // make moves
-                if (cell.getAdjFlags() == Character.getNumericValue(cellContents)) {
-                    System.out.println("hit1");
-                    for (int j = 0; j < adjacent.length; ++j) {
-                        if (adjacent[j] == null)
-                            continue;
-
-                        if (adjacent[j].getContents() == 'U') {
-                            System.out.println("hit2");
+                            numOfFlags++;
                             this.bot.mouseMove(adjacent[j].getXCoord(), adjacent[j].getYCoord());
-                            this.bot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
-                            this.bot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
+                            this.bot.mousePress(InputEvent.BUTTON3_DOWN_MASK);
+                            this.bot.mouseRelease(InputEvent.BUTTON3_DOWN_MASK);
+                            this.gameBoard.setNumOfUnclicked(this.gameBoard.getUnclicked() - 1);
                         }
                     }
                 }
-
-                // System.out.println("Syncing board...");
-                // syncBoard(false);
-                // System.out.println("Board synced.\n");
-
-                if (this.debug)
-                    System.out.println(this.gameBoard);
             }
+
+            if (this.debug){
+                System.out.println("Current Board: " +this.gameBoard);
+                System.out.println("number of flags: " +numOfFlags +"\n");
+            }
+
+            for(int i = 0; i < this.gameBoard.getSize(); ++i){
+                // variables
+                Cell cell = this.gameBoard.getCellAtIndex(i);
+                char cellContents = cell.getContents();
+                Cell[] adjacent = cell.getAdjacent();
+
+                if(cell.getContents() == 'E' || cell.getContents() == 'U')
+                    continue;
+
+                //make moves
+                if(cell.getAdjFlags() == Character.getNumericValue(cellContents)){
+                    for(int j = 0; j < adjacent.length; ++j){
+                        if(adjacent[j] == null)
+                            continue;
+
+                        if(adjacent[j].getContents() == 'U'){
+                            //adjacent[j].setContents('C');
+                            numOfMoves++;
+                            this.bot.mouseMove(adjacent[j].getXCoord(), adjacent[j].getYCoord());
+                            this.bot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
+                            this.bot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
+                            this.gameBoard.setNumOfUnclicked(this.gameBoard.getUnclicked() - 1);
+                        }
+                    }
+                }
+            }
+
+            if (this.debug){
+                System.out.println("Current Board: " +this.gameBoard);
+                System.out.println("number of moves: " +numOfMoves +"\n");
+            }
+
         } while (run);
+
+        if(this.gameBoard.getUnclicked() != 0)
+            solve();
     }
 }
