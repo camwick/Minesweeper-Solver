@@ -1,7 +1,7 @@
 import java.util.Scanner;
 
 public class Main {
-  public static void main(String[] args) {
+  public static void main(String[] args) throws InterruptedException {
     // variables
     Scanner input = new Scanner(System.in);
 
@@ -38,5 +38,8 @@ public class Main {
 
     // create solver object
     Solver game = new Solver(difficulty, debug, width, height, mineCount);
+
+    // start solving
+    game.solve();
   }
 }

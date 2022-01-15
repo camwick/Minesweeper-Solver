@@ -1,6 +1,8 @@
 public class Cell {
     private char contents;
     private Cell[] adjacentCells;
+    private int x;
+    private int y;
 
     /**
      * Default constructor.
@@ -22,6 +24,10 @@ public class Cell {
         this.adjacentCells = new Cell[8];
     }
 
+    public char getContents() {
+        return this.contents;
+    }
+
     /**
      * Returns the adjacentCells object
      * 
@@ -31,6 +37,38 @@ public class Cell {
         return this.adjacentCells;
     }
 
+    public int getNumUnlickedAdj() {
+        int count = 0;
+        for (int i = 0; i < adjacentCells.length; ++i) {
+            if (adjacentCells[i] == null)
+                continue;
+
+            if (adjacentCells[i].getContents() == 'U' || adjacentCells[i].getContents() == 'F')
+                count++;
+        }
+        return count;
+    }
+
+    public int getXCoord() {
+        return this.x;
+    }
+
+    public int getYCoord() {
+        return this.y;
+    }
+
+    public int getAdjFlags() {
+        int count = 0;
+        for (int i = 0; i < adjacentCells.length; ++i) {
+            if (adjacentCells[i] == null)
+                continue;
+
+            if (adjacentCells[i].getContents() == 'F')
+                count++;
+        }
+        return count;
+    }
+
     /**
      * Set contents variable.
      * 
@@ -38,6 +76,11 @@ public class Cell {
      */
     public void setContents(char newContents) {
         this.contents = newContents;
+    }
+
+    public void setCoords(int x, int y) {
+        this.x = x;
+        this.y = y;
     }
 
     /**
