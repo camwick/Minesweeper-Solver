@@ -185,7 +185,7 @@ public class Solver {
                 break;
         }
 
-        this.cellSideLength = newCSL;
+        this.cellSideLength = csl;
         this.cellOffset = csl - newCSL;
 
         if (this.debug) {
@@ -202,8 +202,8 @@ public class Solver {
      */
     private void syncBoard(boolean start) {
         // x and y coordinates of the middle of the first cell
-        int centerX = this.ul_x + (this.cellSideLength / 2);
-        int centerY = this.ul_y + (this.cellSideLength / 2);
+        int centerX = this.ul_x + ((this.cellSideLength - this.cellOffset) / 2);
+        int centerY = this.ul_y + ((this.cellSideLength - this.cellOffset) / 2);
 
         // loop through entire board on screen
         // check center of cell's pixel color and create a String based on those colors
@@ -216,12 +216,15 @@ public class Solver {
                     this.bot.mouseMove(centerX + (x * this.cellSideLength), centerY + (y * this.cellSideLength));
 
                 // set x and y coordinates of invidiual cells
-                xCoord[y * this.gameBoard.getHeight() + x] = centerX + (x * this.cellSideLength);
-                yCoord[y * this.gameBoard.getHeight() + x] = centerY + (y * this.cellSideLength);
+                xCoord[y * this.gameBoard.getHeight() + x] = centerX + (x * (this.cellSideLength));
+                yCoord[y * this.gameBoard.getHeight() + x] = centerY + (y * (this.cellSideLength));
 
                 // color of center of cell
                 Color px = this.bot.getPixelColor(centerX + (x * this.cellSideLength),
                         centerY + (y * this.cellSideLength));
+
+                System.out.println("Color: " + px);
+                System.exit(1);
 
                 // distinguish between finding starting green x or not
                 if (start) {
@@ -284,6 +287,10 @@ public class Solver {
                     // light gray pixel == 8
                     else if (px.getRed() == 128 && px.getGreen() == 128 && px.getBlue() == 128)
                         boardState += '8';
+                    else {
+                        System.out.println("Color: " + px);
+                    }
+
                 }
             }
         }
