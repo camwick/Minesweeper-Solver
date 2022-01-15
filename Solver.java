@@ -10,6 +10,7 @@ public class Solver {
     private int ul_x;
     private int ul_y;
     private int cellSideLength;
+    private int cellOffset;
     private boolean debug = false;
     private int[] startCoord = new int[2];
 
@@ -143,7 +144,49 @@ public class Solver {
             }
         }
 
-        this.cellSideLength = csl;
+        // this.cellSideLength = csl;
+        // csl will help calculate offset
+
+        // find the gray corner of the cell to act as 'true' top left corner
+        for (int y = 0; y < csl / 2; ++y) {
+            pxColor = this.bot.getPixelColor(this.ul_x + csl / 2, this.ul_y + y);
+
+            if (this.debug)
+                this.bot.mouseMove(this.ul_x + csl / 2, this.ul_y + y);
+
+            if (pxColor.getRed() == 198 && pxColor.getGreen() == 198 && pxColor.getBlue() == 198) {
+                this.ul_y = this.ul_y + y;
+                break;
+            }
+        }
+
+        for (int x = 0; x < csl / 2; ++x) {
+            pxColor = this.bot.getPixelColor(this.ul_x + x, this.ul_y);
+
+            if (this.debug)
+                this.bot.mouseMove(this.ul_x + x, this.ul_y);
+
+            if (pxColor.getRed() == 198 && pxColor.getGreen() == 198 && pxColor.getBlue() == 198) {
+                this.ul_x = this.ul_x + x;
+                break;
+            }
+        }
+
+        // calculate new side length + offset
+        int newCSL = 0;
+        for (int x = 0; x < csl; ++x) {
+            pxColor = this.bot.getPixelColor(this.ul_x + x, this.ul_y);
+
+            if (this.debug)
+                this.bot.mouseMove(this.ul_x + x, this.ul_y);
+
+            newCSL++;
+            if (!(pxColor.getRed() == 198 && pxColor.getGreen() == 198 && pxColor.getBlue() == 198))
+                break;
+        }
+
+        this.cellSideLength = newCSL;
+        this.cellOffset = csl - newCSL;
 
         if (this.debug)
             System.out.println("Cell Side Length: " + this.cellSideLength);
