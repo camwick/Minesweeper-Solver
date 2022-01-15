@@ -229,7 +229,6 @@ public class Solver {
                     // mark this cell
 
                     if (px.getRed() == 0 && px.getGreen() == 128 && px.getBlue() == 0) {
-                        System.out.println("AHHHHHHHHHHHHHH");
                         this.startCoord[0] = centerX + (x * this.cellSideLength);
                         this.startCoord[1] = centerY + (y * this.cellSideLength);
                         // this.gameBoard.setCellContent((y * this.gameBoard.getWidth()) + x, 'S');
