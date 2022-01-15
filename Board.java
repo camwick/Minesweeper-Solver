@@ -56,6 +56,10 @@ public class Board {
         this.unclicked = counter;
     }
 
+    public void setCellContent(int index, char content) {
+        this.board[index].setContents(content);
+    }
+
     /**
      * Set board object's adjacent cells.
      * 
