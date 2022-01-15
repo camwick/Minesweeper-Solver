@@ -26,6 +26,9 @@ public class Board {
         for (int i = 0; i < this.width * this.height; i++) {
             this.board[i] = new Cell();
         }
+
+        // set adjacent cells
+        setBoardAdjacents();
     }
 
     public int getSize() {

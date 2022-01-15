@@ -67,9 +67,6 @@ public class Solver {
         // get initial board state
         syncBoard(true);
 
-        // set adjacent cells
-        this.gameBoard.setBoardAdjacents();
-
         // make first move
         this.bot.mouseMove(startCoord[0], startCoord[1]);
         this.bot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
