@@ -36,12 +36,21 @@ public class Board {
         return this.board[index];
     }
 
-    public void setNumOfUnclicked(int unclicked){
+    public void setNumOfUnclicked(int unclicked) {
         this.unclicked = unclicked;
     }
 
-    public int getUnclicked(){
+    public int getUnclicked() {
         return this.unclicked;
+    }
+
+    public void updateUnclicked() {
+        int counter = 0;
+        for (int i = 0; i < board.length; ++i) {
+            if (board[i].getContents() == 'U')
+                counter++;
+        }
+        this.unclicked = counter;
     }
 
     /**
