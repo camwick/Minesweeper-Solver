@@ -188,8 +188,10 @@ public class Solver {
         this.cellSideLength = newCSL;
         this.cellOffset = csl - newCSL;
 
-        if (this.debug)
-            System.out.println("Cell Side Length: " + this.cellSideLength);
+        if (this.debug) {
+            System.out.println("Gray edge length: " + this.cellSideLength);
+            System.out.println("Cell offset: " + this.cellOffset);
+        }
     }
 
     /**
