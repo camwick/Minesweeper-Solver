@@ -43,7 +43,7 @@ public class Cell {
             if (adjacentCells[i] == null)
                 continue;
 
-            if (adjacentCells[i].getContents() == 'U' || adjacentCells[i].getContents() == 'F')
+            if (adjacentCells[i].getContents() == 'U')
                 count++;
         }
         return count;
@@ -60,7 +60,8 @@ public class Cell {
     public int getAdjFlags() {
         int count = 0;
         for (int i = 0; i < adjacentCells.length; ++i) {
-            if (adjacentCells[i] == null)
+            if (adjacentCells[i] == null || adjacentCells[i].getContents() == 'U'
+                    || adjacentCells[i].getContents() == 'E')
                 continue;
 
             if (adjacentCells[i].getContents() == 'F')
