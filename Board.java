@@ -57,6 +57,24 @@ public class Board {
     }
 
     /**
+     * Get width of board object
+     * 
+     * @return int, width of board
+     */
+    public int getWidth() {
+        return this.width;
+    }
+
+    /**
+     * Get height of board object
+     * 
+     * @return int, height of board
+     */
+    public int getHeight() {
+        return this.height;
+    }
+
+    /**
      * Set number of unclicked cells
      * 
      * @param unclicked int, number of unclicked cells
@@ -245,24 +263,6 @@ public class Board {
         for (int i = 0; i < this.board.length; ++i) {
             this.board[i].setContents(boardKey.charAt(i));
         }
-    }
-
-    /**
-     * Get width of board object
-     * 
-     * @return int, width of board
-     */
-    public int getWidth() {
-        return this.width;
-    }
-
-    /**
-     * Get height of board object
-     * 
-     * @return int, height of board
-     */
-    public int getHeight() {
-        return this.height;
     }
 
     /**
