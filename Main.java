@@ -41,5 +41,7 @@ public class Main {
 
     // start solving
     game.solve();
+
+    input.close();
   }
 }
