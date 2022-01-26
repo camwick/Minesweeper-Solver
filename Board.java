@@ -21,28 +21,48 @@ public class Board {
         this.board = new Cell[width * height];
 
         // initiate Cell objects
-        for (int i = 0; i < this.width * this.height; i++) {
+        for (int i = 0; i < this.width * this.height; i++)
             this.board[i] = new Cell();
-        }
 
         // set adjacent cells
         setBoardAdjacents();
     }
 
+    /**
+     * Get board size.
+     * 
+     * @return int, size of Cell array
+     */
     public int getSize() {
         return this.board.length;
     }
 
+    /**
+     * Get a Cell at specified index.
+     * 
+     * @param index int, index of Cell in Cell array
+     * @return Cell
+     */
     public Cell getCellAtIndex(int index) {
         return this.board[index];
     }
 
-    public void setNumOfUnclicked(int unclicked) {
-        this.unclicked = unclicked;
-    }
-
+    /**
+     * Get number of unclicked cells
+     * 
+     * @return int, unclicked cells
+     */
     public int getUnclicked() {
         return this.unclicked;
+    }
+
+    /**
+     * Set number of unclicked cells
+     * 
+     * @param unclicked int, number of unclicked cells
+     */
+    public void setNumOfUnclicked(int unclicked) {
+        this.unclicked = unclicked;
     }
 
     public void updateUnclicked() {
