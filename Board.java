@@ -65,6 +65,12 @@ public class Board {
         this.unclicked = unclicked;
     }
 
+    /**
+     * Set the contents of a specified Cell
+     * 
+     * @param index   int, index of Cell in Cell array
+     * @param content char, contents of the Cell to be changed to
+     */
     public void setCellContent(int index, char content) {
         this.board[index].setContents(content);
     }
@@ -72,7 +78,7 @@ public class Board {
     /**
      * Set board object's adjacent cells.
      * 
-     * Loops through entire this.board and sets every cell's adjacent adjacentCell
+     * Loops through entire board object and sets every cell's adjacent adjacentCell
      * array to the correct cells.
      */
     public void setBoardAdjacents() {
@@ -138,7 +144,6 @@ public class Board {
                     adjacent[j] = null;
                 } else if (j == 3) {
                     adjacent[j] = this.board[i - 1];
-
                 } else if (j == 4) {
                     adjacent[j] = this.board[i + 1];
                 } else {
