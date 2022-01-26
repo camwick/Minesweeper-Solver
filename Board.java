@@ -65,15 +65,6 @@ public class Board {
         this.unclicked = unclicked;
     }
 
-    public void updateUnclicked() {
-        int counter = 0;
-        for (int i = 0; i < board.length; ++i) {
-            if (board[i].getContents() == 'U')
-                counter++;
-        }
-        this.unclicked = counter;
-    }
-
     public void setCellContent(int index, char content) {
         this.board[index].setContents(content);
     }
