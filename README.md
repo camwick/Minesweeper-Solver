@@ -10,15 +10,17 @@ Make sure to create a pull request before merging to main.
 
 ## Working On:
 
-- getting basic cases of mine detection working with mouse clicks
+- 1-2 mine patter
+- mine pattern recognition
 
 ## Goals:
 
 - Solve no-guess boards on [minesweeper.online](https://minesweeper.online/)
-  - Might switch to [Minesweeper Arbiter](https://minesweepergame.com/download/arbiter.php) due to bots being against minesweeper.online's rules
-- Automatically update board state
-- Bot is capable of moving the mouse and clicking
-- Basic minesweeper pattern recognition
+  - Might switch to [minesweeperonline.com](https://minesweeperonline.com/) due to bots being against minesweeper.online's rules
+- Automatically update board state ✅
+- Bot is capable of moving the mouse and clicking ✅
+- Basic minesweeper pattern recognition ✅
+- Advanced pattern recognition
 
 ## Rough Outline:
 
@@ -27,6 +29,8 @@ Make sure to create a pull request before merging to main.
 - Linking Cell objects based on proximity (adjacent)
 - Mine pattern recognition
 - Main bot loop
+  - basic mine recognition
+  - advanced pattern recognition 
 
 ## Potential Additions:
 
