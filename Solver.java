@@ -2,6 +2,7 @@ import java.awt.Robot;
 import java.awt.AWTException;
 import java.awt.Color;
 import java.awt.Toolkit;
+import java.awt.event.InputEvent;
 
 public class Solver {
     private Robot bot;
@@ -9,18 +10,9 @@ public class Solver {
     private int ul_x;
     private int ul_y;
     private int cellSideLength;
+    private int cellOffset;
     private boolean debug = false;
     private int[] startCoord = new int[2];
-
-    /**
-     * Default constructor. Calls the debugging constructor with debugging
-     * information set to false.
-     * 
-     * @param difficulty Integer corresponding to board difficulty
-     */
-    public Solver(int difficulty) {
-        this(difficulty, false);
-    }
 
     /**
      * Constructor with debugging information.
@@ -28,8 +20,9 @@ public class Solver {
      * @param difficulty Integer corresponding to board difficulty
      * @param debug      Boolean - print debug messages and move mouse on
      *                   calibration
+     * @throws InterruptedException
      */
-    public Solver(int difficulty, boolean debug) {
+    public Solver(int difficulty, boolean debug, int width, int height, int mineCount) throws InterruptedException {
         // set debug boolean
         this.debug = debug;
 
@@ -58,6 +51,9 @@ public class Solver {
             case 4: // evil
                 this.gameBoard = new Board(30, 20, 130);
                 break;
+            case 5: // custom
+                this.gameBoard = new Board(width, height, mineCount);
+                break;
             default: // invalid difficulty
                 System.out.println("Invalid difficulty entered: " + difficulty);
                 System.exit(1);
@@ -70,10 +66,16 @@ public class Solver {
         System.out.println("Board calibrated.");
 
         // get initial board state
-        syncBoard(false);
+        syncBoard(true);
 
-        // set adjacent cells
-        this.gameBoard.setBoardAdjacents();
+        // make first move
+        this.bot.mouseMove(startCoord[0], startCoord[1]);
+        this.bot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
+        this.bot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
+        Thread.sleep(500);
+
+        // update board
+        syncBoard(false);
     }
 
     /**
@@ -141,11 +143,53 @@ public class Solver {
                 break;
             }
         }
+        // csl will help calculate offset
+
+        // find the gray corner of the cell to act as 'true' top left corner
+        for (int y = 0; y < csl / 2; ++y) {
+            pxColor = this.bot.getPixelColor(this.ul_x + csl / 2, this.ul_y + y);
+
+            if (this.debug)
+                this.bot.mouseMove(this.ul_x + csl / 2, this.ul_y + y);
+
+            if (pxColor.getRed() == 198 && pxColor.getGreen() == 198 && pxColor.getBlue() == 198) {
+                this.ul_y = this.ul_y + y;
+                break;
+            }
+        }
+
+        for (int x = 0; x < csl / 2; ++x) {
+            pxColor = this.bot.getPixelColor(this.ul_x + x, this.ul_y);
+
+            if (this.debug)
+                this.bot.mouseMove(this.ul_x + x, this.ul_y);
+
+            if (pxColor.getRed() == 198 && pxColor.getGreen() == 198 && pxColor.getBlue() == 198) {
+                this.ul_x = this.ul_x + x;
+                break;
+            }
+        }
+
+        // calculate new side length + offset
+        int newCSL = 0;
+        for (int x = 0; x < csl; ++x) {
+            pxColor = this.bot.getPixelColor(this.ul_x + x, this.ul_y);
+
+            if (this.debug)
+                this.bot.mouseMove(this.ul_x + x, this.ul_y);
+
+            newCSL++;
+            if (!(pxColor.getRed() == 198 && pxColor.getGreen() == 198 && pxColor.getBlue() == 198))
+                break;
+        }
 
         this.cellSideLength = csl;
+        this.cellOffset = csl - newCSL;
 
-        if (this.debug)
-            System.out.println("Cell Side Length: " + this.cellSideLength);
+        if (this.debug) {
+            System.out.println("Cell length: " + this.cellSideLength);
+            System.out.println("Cell offset: " + this.cellOffset);
+        }
     }
 
     /**
@@ -155,21 +199,31 @@ public class Solver {
      * @param start If true, save the coordinates of the green X
      */
     private void syncBoard(boolean start) {
+        boolean breakStart = false;
+        int numUnclicked = 0;
+
         // x and y coordinates of the middle of the first cell
-        int centerX = this.ul_x + (this.cellSideLength / 2);
-        int centerY = this.ul_y + (this.cellSideLength / 2);
+        int centerX = this.ul_x + ((this.cellSideLength - this.cellOffset) / 2) + 1;
+        int centerY = this.ul_y + ((this.cellSideLength - this.cellOffset) / 2) + 1;
 
         // loop through entire board on screen
         // check center of cell's pixel color and create a String based on those colors
         String boardState = "";
-        for (int y = 0; y < this.gameBoard.getHeight(); ++y) {
-            for (int x = 0; x < this.gameBoard.getWidth(); ++x) {
+        int[] xCoord = new int[this.gameBoard.getSize()];
+        int[] yCoord = new int[this.gameBoard.getSize()];
+        for (int y = 0; y < this.gameBoard.getWidth(); ++y) {
+            for (int x = 0; x < this.gameBoard.getHeight(); ++x) {
                 if (this.debug)
-                    this.bot.mouseMove(centerX + (x * this.cellSideLength), centerY + (y * this.cellSideLength));
+                    this.bot.mouseMove(centerX + (x * (this.cellSideLength)),
+                            centerY + (y * (this.cellSideLength)));
+
+                // set x and y coordinates of invidiual cells
+                xCoord[y * this.gameBoard.getHeight() + x] = centerX + (x * (this.cellSideLength));
+                yCoord[y * this.gameBoard.getHeight() + x] = centerY + (y * (this.cellSideLength));
 
                 // color of center of cell
-                Color px = this.bot.getPixelColor(centerX + (x * this.cellSideLength),
-                        centerY + (y * this.cellSideLength));
+                Color px = this.bot.getPixelColor(centerX + (x * (this.cellSideLength)),
+                        centerY + (y * (this.cellSideLength)));
 
                 // distinguish between finding starting green x or not
                 if (start) {
@@ -179,26 +233,32 @@ public class Solver {
                     if (px.getRed() == 0 && px.getGreen() == 128 && px.getBlue() == 0) {
                         this.startCoord[0] = centerX + (x * this.cellSideLength);
                         this.startCoord[1] = centerY + (y * this.cellSideLength);
-                        boardState += 'S';
-                    } else
-                        boardState += 'U';
+                        breakStart = true;
+                        break;
+                    }
                 } else {
                     // start = false
-                    // board will consist of more than just unclicked cells and won't have a green x
 
-                    // grabs gray pixels
+                    // grab gray pixel
                     if (px.getRed() == 198 && px.getGreen() == 198 && px.getBlue() == 198) {
-                        px = this.bot.getPixelColor(centerX + (x * this.cellSideLength) - (this.cellSideLength / 2),
+                        // shift over to check for white pixel
+                        this.bot.mouseMove(
+                                ((centerX + (x * this.cellSideLength))
+                                        - ((this.cellSideLength) / 2) + 2),
+                                centerY + (y * this.cellSideLength));
+                        px = this.bot.getPixelColor(
+                                ((centerX + (x * this.cellSideLength))
+                                        - ((this.cellSideLength) / 2) + 2),
                                 centerY + (y * this.cellSideLength));
 
-                        // if the cell has a white pixel ... unclicked cell
-                        if (px.equals(Color.WHITE))
+                        if (px.equals(Color.WHITE)) {
                             boardState += 'U';
-                        else // empty cell with no white pixel
+                            numUnclicked++;
+                        } else
                             boardState += 'E';
                     }
-                    // different shade of gray == flag
-                    else if (px.getRed() == 168 && px.getGreen() == 168 && px.getBlue() == 168)
+                    // flag
+                    else if (px.equals(Color.BLACK))
                         boardState += 'F';
                     // blue pixel == 1
                     else if (px.getBlue() == 255 && px.getRed() == 0 && px.getGreen() == 0)
@@ -224,28 +284,32 @@ public class Solver {
                     // light gray pixel == 8
                     else if (px.getRed() == 128 && px.getGreen() == 128 && px.getBlue() == 128)
                         boardState += '8';
+                    // if something bad happens, print the color that gets detected
+                    else
+                        System.out.println("Color: " + px);
                 }
             }
+            if (breakStart)
+                break;
+        }
+
+        if (start)
+            return;
+
+        // set x and y cell coordinates
+        for (int i = 0; i < this.gameBoard.getSize(); ++i) {
+            this.gameBoard.getCellAtIndex(i).setCoords(xCoord[i], yCoord[i]);
         }
 
         // update the board
         this.gameBoard.updateBoard(boardState);
 
+        // update number of unclicked cells
+        this.gameBoard.setNumOfUnclicked(numUnclicked);
+
         // debug info
         if (this.debug) {
-            int counter = 0;
-            for (int i = 0; i < boardState.length(); ++i) {
-                if (counter <= this.gameBoard.getHeight()) {
-                    System.out.print(boardState.charAt(i));
-                    counter++;
-                }
-
-                if (counter == this.gameBoard.getWidth()) {
-                    System.out.println("");
-                    counter = 0;
-                }
-            }
-            System.out.println("");
+            System.out.println(this.gameBoard);
         }
     }
 
@@ -256,5 +320,84 @@ public class Solver {
      */
     public Board getBoard() {
         return this.gameBoard;
+    }
+
+    /**
+     * Main solve loop.
+     * Loops over the board object repeatedly looking for mine patterns. Marks mines
+     * and clicks safe cells.
+     */
+    public void solve() {
+        if (this.debug) {
+            System.out.println("Board state before flagging/moves: " + this.gameBoard);
+        }
+
+        // marks basic flags
+        for (int i = 0; i < this.gameBoard.getSize(); ++i) {
+            // variables
+            Cell cell = this.gameBoard.getCellAtIndex(i);
+            char cellContents = cell.getContents();
+
+            // skip empty/unclicked cells
+            if (cellContents == 'E' || cellContents == 'U' || cellContents == 'F')
+                continue;
+
+            // marks flags
+            Cell[] adjacent = cell.getAdjacent();
+            if (cell.getNumUnlickedAdj() == Character.getNumericValue(cellContents) - cell.getAdjFlags()
+                    && cell.getAdjFlags() != Character.getNumericValue(cellContents)) {
+                for (int j = 0; j < adjacent.length; ++j) {
+                    if (cell.getAdjFlags() == Character.getNumericValue(cellContents))
+                        break;
+
+                    if (adjacent[j] == null || adjacent[j].getContents() == 'F')
+                        continue;
+
+                    if (adjacent[j].getContents() == 'U') {
+                        adjacent[j].setContents('F');
+                        this.bot.mouseMove(adjacent[j].getXCoord(), adjacent[j].getYCoord());
+                        this.bot.mousePress(InputEvent.BUTTON3_DOWN_MASK);
+                        this.bot.mouseRelease(InputEvent.BUTTON3_DOWN_MASK);
+                    }
+                }
+            }
+        }
+
+        // making moves
+        for (int i = 0; i < this.gameBoard.getSize(); ++i) {
+            // variables
+            Cell cell = this.gameBoard.getCellAtIndex(i);
+            char cellContents = cell.getContents();
+            Cell[] adjacent = cell.getAdjacent();
+
+            if (cell.getContents() == 'E' || cell.getContents() == 'U' || cell.getContents() == 'F')
+                continue;
+
+            // make moves
+            if (cell.getAdjFlags() == Character.getNumericValue(cellContents) && !(cell.getNumUnlickedAdj() == 0)) {
+                for (int j = 0; j < adjacent.length; ++j) {
+                    if (cell.getNumUnlickedAdj() == 0)
+                        break;
+
+                    if (adjacent[j] == null || cell.getContents() == 'E')
+                        continue;
+
+                    if (adjacent[j].getContents() == 'U') {
+                        this.bot.mouseMove(adjacent[j].getXCoord(), adjacent[j].getYCoord());
+                        this.bot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
+                        this.bot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
+                    }
+                }
+                syncBoard(false);
+            }
+        }
+
+        if (this.debug) {
+            System.out.println("\nBoard State after flagging/moves: " + this.gameBoard + "\n");
+        }
+
+        if (this.gameBoard.getUnclicked() != 0) {
+            solve();
+        }
     }
 }

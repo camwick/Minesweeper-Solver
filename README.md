@@ -10,10 +10,7 @@ Make sure to create a pull request before merging to main.
 
 ## Working On:
 
-- potential branches to work on:
-  - get board state from screen
-    - create some sort of input object to be given to an object constructor for Board
-  - create Board object form said input object
+- getting basic cases of mine detection working with mouse clicks
 
 ## Goals:
 

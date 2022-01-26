@@ -1,6 +1,8 @@
 public class Cell {
     private char contents;
     private Cell[] adjacentCells;
+    private int x;
+    private int y;
 
     /**
      * Default constructor.
@@ -23,12 +25,74 @@ public class Cell {
     }
 
     /**
+     * Get the Cell's content
+     * 
+     * @return
+     */
+    public char getContents() {
+        return this.contents;
+    }
+
+    /**
      * Returns the adjacentCells object
      * 
-     * @return adjacentCells array
+     * @return adjacent Cells array
      */
     public Cell[] getAdjacent() {
         return this.adjacentCells;
+    }
+
+    /**
+     * Get number of of adjacent unclicked cells
+     * 
+     * @return int, number of adjacent unclicked cells
+     */
+    public int getNumUnlickedAdj() {
+        int count = 0;
+        for (int i = 0; i < adjacentCells.length; ++i) {
+            if (adjacentCells[i] == null)
+                continue;
+
+            if (adjacentCells[i].getContents() == 'U')
+                count++;
+        }
+        return count;
+    }
+
+    /**
+     * Get x-coordinate of Cell
+     * 
+     * @return int, x-coordinate
+     */
+    public int getXCoord() {
+        return this.x;
+    }
+
+    /**
+     * Get y-coordinate of Cell
+     * 
+     * @return int, y-coordinate
+     */
+    public int getYCoord() {
+        return this.y;
+    }
+
+    /**
+     * Get number of adjacent flags
+     * 
+     * @return int, number of adjacent flags
+     */
+    public int getAdjFlags() {
+        int count = 0;
+        for (int i = 0; i < adjacentCells.length; ++i) {
+            if (adjacentCells[i] == null || adjacentCells[i].getContents() == 'U'
+                    || adjacentCells[i].getContents() == 'E')
+                continue;
+
+            if (adjacentCells[i].getContents() == 'F')
+                count++;
+        }
+        return count;
     }
 
     /**
@@ -38,6 +102,11 @@ public class Cell {
      */
     public void setContents(char newContents) {
         this.contents = newContents;
+    }
+
+    public void setCoords(int x, int y) {
+        this.x = x;
+        this.y = y;
     }
 
     /**
