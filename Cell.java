@@ -24,6 +24,11 @@ public class Cell {
         this.adjacentCells = new Cell[8];
     }
 
+    /**
+     * Get the Cell's content
+     * 
+     * @return
+     */
     public char getContents() {
         return this.contents;
     }
@@ -31,12 +36,17 @@ public class Cell {
     /**
      * Returns the adjacentCells object
      * 
-     * @return adjacentCells array
+     * @return adjacent Cells array
      */
     public Cell[] getAdjacent() {
         return this.adjacentCells;
     }
 
+    /**
+     * Get number of of adjacent unclicked cells
+     * 
+     * @return int, number of adjacent unclicked cells
+     */
     public int getNumUnlickedAdj() {
         int count = 0;
         for (int i = 0; i < adjacentCells.length; ++i) {
@@ -49,14 +59,29 @@ public class Cell {
         return count;
     }
 
+    /**
+     * Get x-coordinate of Cell
+     * 
+     * @return int, x-coordinate
+     */
     public int getXCoord() {
         return this.x;
     }
 
+    /**
+     * Get y-coordinate of Cell
+     * 
+     * @return int, y-coordinate
+     */
     public int getYCoord() {
         return this.y;
     }
 
+    /**
+     * Get number of adjacent flags
+     * 
+     * @return int, number of adjacent flags
+     */
     public int getAdjFlags() {
         int count = 0;
         for (int i = 0; i < adjacentCells.length; ++i) {
