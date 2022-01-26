@@ -143,8 +143,6 @@ public class Solver {
                 break;
             }
         }
-
-        // this.cellSideLength = csl;
         // csl will help calculate offset
 
         // find the gray corner of the cell to act as 'true' top left corner
@@ -286,6 +284,7 @@ public class Solver {
                     // light gray pixel == 8
                     else if (px.getRed() == 128 && px.getGreen() == 128 && px.getBlue() == 128)
                         boardState += '8';
+                    // if something bad happens, print the color that gets detected
                     else
                         System.out.println("Color: " + px);
                 }
@@ -312,7 +311,6 @@ public class Solver {
         if (this.debug) {
             System.out.println(this.gameBoard);
         }
-
     }
 
     /**
@@ -324,8 +322,12 @@ public class Solver {
         return this.gameBoard;
     }
 
+    /**
+     * Main solve loop.
+     * Loops over the board object repeatedly looking for mine patterns. Marks mines
+     * and clicks safe cells.
+     */
     public void solve() {
-
         if (this.debug) {
             System.out.println("Board state before flagging/moves: " + this.gameBoard);
         }
@@ -386,7 +388,6 @@ public class Solver {
                         this.bot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
                     }
                 }
-
                 syncBoard(false);
             }
         }
@@ -396,7 +397,6 @@ public class Solver {
         }
 
         if (this.gameBoard.getUnclicked() != 0) {
-            // syncBoard(false);
             solve();
         }
     }
