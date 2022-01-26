@@ -189,7 +189,7 @@ public class Solver {
         this.cellOffset = csl - newCSL;
 
         if (this.debug) {
-            System.out.println("Gray edge length: " + this.cellSideLength);
+            System.out.println("Cell length: " + this.cellSideLength);
             System.out.println("Cell offset: " + this.cellOffset);
         }
     }
@@ -201,9 +201,12 @@ public class Solver {
      * @param start If true, save the coordinates of the green X
      */
     private void syncBoard(boolean start) {
+        boolean breakStart = false;
+        int numUnclicked = 0;
+
         // x and y coordinates of the middle of the first cell
-        int centerX = this.ul_x + ((this.cellSideLength - this.cellOffset) / 2);
-        int centerY = this.ul_y + ((this.cellSideLength - this.cellOffset) / 2);
+        int centerX = this.ul_x + ((this.cellSideLength - this.cellOffset) / 2) + 1;
+        int centerY = this.ul_y + ((this.cellSideLength - this.cellOffset) / 2) + 1;
 
         // loop through entire board on screen
         // check center of cell's pixel color and create a String based on those colors
@@ -213,18 +216,16 @@ public class Solver {
         for (int y = 0; y < this.gameBoard.getWidth(); ++y) {
             for (int x = 0; x < this.gameBoard.getHeight(); ++x) {
                 if (this.debug)
-                    this.bot.mouseMove(centerX + (x * this.cellSideLength), centerY + (y * this.cellSideLength));
+                    this.bot.mouseMove(centerX + (x * (this.cellSideLength)),
+                            centerY + (y * (this.cellSideLength)));
 
                 // set x and y coordinates of invidiual cells
                 xCoord[y * this.gameBoard.getHeight() + x] = centerX + (x * (this.cellSideLength));
                 yCoord[y * this.gameBoard.getHeight() + x] = centerY + (y * (this.cellSideLength));
 
                 // color of center of cell
-                Color px = this.bot.getPixelColor(centerX + (x * this.cellSideLength),
-                        centerY + (y * this.cellSideLength));
-
-                System.out.println("Color: " + px);
-                System.exit(1);
+                Color px = this.bot.getPixelColor(centerX + (x * (this.cellSideLength)),
+                        centerY + (y * (this.cellSideLength)));
 
                 // distinguish between finding starting green x or not
                 if (start) {
@@ -234,35 +235,33 @@ public class Solver {
                     if (px.getRed() == 0 && px.getGreen() == 128 && px.getBlue() == 0) {
                         this.startCoord[0] = centerX + (x * this.cellSideLength);
                         this.startCoord[1] = centerY + (y * this.cellSideLength);
-                        boardState += 'S';
-                    } else
-                        boardState += 'U';
+                        breakStart = true;
+                        break;
+                    }
                 } else {
                     // start = false
-                    // board will consist of more than just unclicked cells and won't have a green x
 
-                    // grabs gray pixels
+                    // grab gray pixel
                     if (px.getRed() == 198 && px.getGreen() == 198 && px.getBlue() == 198) {
-                        px = this.bot.getPixelColor(centerX + (x * this.cellSideLength) - (this.cellSideLength / 2),
+                        // shift over to check for white pixel
+                        this.bot.mouseMove(
+                                ((centerX + (x * this.cellSideLength))
+                                        - ((this.cellSideLength) / 2) + 2),
+                                centerY + (y * this.cellSideLength));
+                        px = this.bot.getPixelColor(
+                                ((centerX + (x * this.cellSideLength))
+                                        - ((this.cellSideLength) / 2) + 2),
                                 centerY + (y * this.cellSideLength));
 
-                        // if the cell has a white pixel ... unclicked cell
                         if (px.equals(Color.WHITE)) {
-                            for (int i = 0; i < this.cellSideLength / 2; ++i) {
-                                px = this.bot.getPixelColor(centerX + (x * this.cellSideLength) + i,
-                                        centerY + (y * this.cellSideLength));
-
-                                if (px.equals(Color.BLACK)) {
-                                    boardState += 'F';
-                                    break;
-                                } else if (px.getRed() == 128 && px.getGreen() == 128 && px.getBlue() == 128) {
-                                    boardState += 'U';
-                                    break;
-                                }
-                            }
-                        } else // empty cell with no white pixel
+                            boardState += 'U';
+                            numUnclicked++;
+                        } else
                             boardState += 'E';
                     }
+                    // flag
+                    else if (px.equals(Color.BLACK))
+                        boardState += 'F';
                     // blue pixel == 1
                     else if (px.getBlue() == 255 && px.getRed() == 0 && px.getGreen() == 0)
                         boardState += '1';
@@ -287,13 +286,16 @@ public class Solver {
                     // light gray pixel == 8
                     else if (px.getRed() == 128 && px.getGreen() == 128 && px.getBlue() == 128)
                         boardState += '8';
-                    else {
+                    else
                         System.out.println("Color: " + px);
-                    }
-
                 }
             }
+            if (breakStart)
+                break;
         }
+
+        if (start)
+            return;
 
         // set x and y cell coordinates
         for (int i = 0; i < this.gameBoard.getSize(); ++i) {
@@ -302,6 +304,9 @@ public class Solver {
 
         // update the board
         this.gameBoard.updateBoard(boardState);
+
+        // update number of unclicked cells
+        this.gameBoard.setNumOfUnclicked(numUnclicked);
 
         // debug info
         if (this.debug) {
@@ -321,8 +326,9 @@ public class Solver {
 
     public void solve() {
 
-        int numOfFlags = 0;
-        int numOfMoves = 0;
+        if (this.debug) {
+            System.out.println("Board state before flagging/moves: " + this.gameBoard);
+        }
 
         // marks basic flags
         for (int i = 0; i < this.gameBoard.getSize(); ++i) {
@@ -336,68 +342,61 @@ public class Solver {
 
             // marks flags
             Cell[] adjacent = cell.getAdjacent();
-            if (cell.getNumUnlickedAdj() == Character.getNumericValue(cellContents)) {
-
+            if (cell.getNumUnlickedAdj() == Character.getNumericValue(cellContents) - cell.getAdjFlags()
+                    && cell.getAdjFlags() != Character.getNumericValue(cellContents)) {
                 for (int j = 0; j < adjacent.length; ++j) {
-                    // TODO WRITE BREAK STATEMENT WHEN FOUND ALL MINES
+                    if (cell.getAdjFlags() == Character.getNumericValue(cellContents))
+                        break;
 
-                    if (adjacent[j] == null)
+                    if (adjacent[j] == null || adjacent[j].getContents() == 'F')
                         continue;
 
                     if (adjacent[j].getContents() == 'U') {
                         adjacent[j].setContents('F');
-                        numOfFlags++;
                         this.bot.mouseMove(adjacent[j].getXCoord(), adjacent[j].getYCoord());
                         this.bot.mousePress(InputEvent.BUTTON3_DOWN_MASK);
                         this.bot.mouseRelease(InputEvent.BUTTON3_DOWN_MASK);
-                        this.gameBoard.setNumOfUnclicked(this.gameBoard.getUnclicked() - 1);
                     }
                 }
             }
         }
 
-        if (this.debug) {
-            System.out.println("Current Board: " + this.gameBoard);
-            System.out.println("number of flags: " + numOfFlags + "\n");
-        }
-
+        // making moves
         for (int i = 0; i < this.gameBoard.getSize(); ++i) {
             // variables
             Cell cell = this.gameBoard.getCellAtIndex(i);
             char cellContents = cell.getContents();
             Cell[] adjacent = cell.getAdjacent();
 
-            if (cell.getContents() == 'E' || cell.getContents() == 'U')
+            if (cell.getContents() == 'E' || cell.getContents() == 'U' || cell.getContents() == 'F')
                 continue;
 
             // make moves
-            if (cell.getAdjFlags() == Character.getNumericValue(cellContents)) {
+            if (cell.getAdjFlags() == Character.getNumericValue(cellContents) && !(cell.getNumUnlickedAdj() == 0)) {
                 for (int j = 0; j < adjacent.length; ++j) {
-                    if (adjacent[j] == null)
+                    if (cell.getNumUnlickedAdj() == 0)
+                        break;
+
+                    if (adjacent[j] == null || cell.getContents() == 'E')
                         continue;
 
                     if (adjacent[j].getContents() == 'U') {
-                        // adjacent[j].setContents('C');
-                        numOfMoves++;
                         this.bot.mouseMove(adjacent[j].getXCoord(), adjacent[j].getYCoord());
                         this.bot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
                         this.bot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
-                        // this.gameBoard.setNumOfUnclicked(this.gameBoard.getUnclicked() - 1);
                     }
                 }
+
+                syncBoard(false);
             }
         }
 
-        // update number of unclicked cells
-        this.gameBoard.updateUnclicked();
-
         if (this.debug) {
-            System.out.println("Current Board: " + this.gameBoard);
-            System.out.println("number of moves: " + numOfMoves + "\n");
+            System.out.println("\nBoard State after flagging/moves: " + this.gameBoard + "\n");
         }
 
         if (this.gameBoard.getUnclicked() != 0) {
-            syncBoard(false);
+            // syncBoard(false);
             solve();
         }
     }
