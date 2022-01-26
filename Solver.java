@@ -242,10 +242,11 @@ public class Solver {
                     // grab gray pixel
                     if (px.getRed() == 198 && px.getGreen() == 198 && px.getBlue() == 198) {
                         // shift over to check for white pixel
-                        this.bot.mouseMove(
-                                ((centerX + (x * this.cellSideLength))
-                                        - ((this.cellSideLength) / 2) + 2),
-                                centerY + (y * this.cellSideLength));
+                        if (this.debug)
+                            this.bot.mouseMove(
+                                    ((centerX + (x * this.cellSideLength))
+                                            - ((this.cellSideLength) / 2) + 2),
+                                    centerY + (y * this.cellSideLength));
                         px = this.bot.getPixelColor(
                                 ((centerX + (x * this.cellSideLength))
                                         - ((this.cellSideLength) / 2) + 2),
