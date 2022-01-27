@@ -38,7 +38,7 @@ Make sure to create a pull request before merging to main.
 - 80% solve rate on regular minesweeper boards (not no-guess)
 - Enable program to work on any minesweeper board
 
-## Resources
+## Resources:
 
 - [Java JDK 16: Color](https://docs.oracle.com/en/java/javase/16/docs/api/java.desktop/java/awt/Color.html)
 - [Java JDK 16: Robot](https://docs.oracle.com/en/java/javase/16/docs/api/java.desktop/java/awt/Robot.html)
