@@ -4,7 +4,7 @@ import java.awt.Color;
 import java.awt.Toolkit;
 import java.awt.event.InputEvent;
 
-public class Solver {
+public class Solver  extends Patterns{
     private Robot bot;
     private Board gameBoard;
     private int ul_x;
@@ -391,6 +391,35 @@ public class Solver {
                 }
                 syncBoard(false);
             }
+        }
+
+        //after checking basic cases - Check for patterns
+
+        
+        for(int i = 0; i < this.gameBoard.getSize(); ++i) {
+            /*these variables could all be declared outside of the for loop because they are used in
+            //multiple loops
+            */
+            Cell cell = this.gameBoard.getCellAtIndex(i);
+            char cellContents = cell.getContents();
+            Cell[] adjacent = cell.getAdjacent();
+
+            if (cell.getContents() == 'E' || cell.getContents() == 'U' || cell.getContents() == 'F')
+                continue;
+
+            //1 - 2 Pattern
+            if(Character.getNumericValue(cellContents) - cell.getAdjFlags() == 2)
+            {
+                if(onetwoPattern(cell))
+                {
+                    //wait I need more information than just true lol
+                    //The bot should move to the location of the mine and flag it
+                    // ^ this could be done in the Patterns.java class
+                    syncBoard(false);
+                }
+
+            }
+
         }
 
         if (this.debug) {
