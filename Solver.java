@@ -286,8 +286,10 @@ public class Solver {
                     else if (px.getRed() == 128 && px.getGreen() == 128 && px.getBlue() == 128)
                         boardState += '8';
                     // if something bad happens, print the color that gets detected
-                    else
+                    else {
+                        System.out.printf("X: %d\nY: %d\n", x, y);
                         System.out.println("Color: " + px);
+                    }
                 }
             }
             if (breakStart)
@@ -323,6 +325,36 @@ public class Solver {
         return this.gameBoard;
     }
 
+    private void makeMoves() {
+        for (int i = 0; i < this.gameBoard.getSize(); ++i) {
+            // variables
+            Cell cell = this.gameBoard.getCellAtIndex(i);
+            char cellContents = cell.getContents();
+            Cell[] adjacent = cell.getAdjacent();
+
+            if (cell.getContents() == 'E' || cell.getContents() == 'U' || cell.getContents() == 'F')
+                continue;
+
+            // make moves
+            if (cell.getAdjFlags() == Character.getNumericValue(cellContents) && !(cell.getNumUnlickedAdj() == 0)) {
+                for (int j = 0; j < adjacent.length; ++j) {
+                    if (cell.getNumUnlickedAdj() == 0)
+                        break;
+
+                    if (adjacent[j] == null || cell.getContents() == 'E')
+                        continue;
+
+                    if (adjacent[j].getContents() == 'U') {
+                        this.bot.mouseMove(adjacent[j].getXCoord(), adjacent[j].getYCoord());
+                        this.bot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
+                        this.bot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
+                    }
+                }
+            }
+        }
+        syncBoard(false);
+    }
+
     /**
      * Main solve loop.
      * Loops over the board object repeatedly looking for mine patterns. Marks mines
@@ -332,6 +364,11 @@ public class Solver {
         if (this.debug) {
             System.out.println("Board state before flagging/moves: " + this.gameBoard);
         }
+
+        int counter = 0;
+
+        if (this.debug)
+            System.out.println("Basic Mine Cases");
 
         // marks basic flags
         for (int i = 0; i < this.gameBoard.getSize(); ++i) {
@@ -359,40 +396,55 @@ public class Solver {
                         this.bot.mouseMove(adjacent[j].getXCoord(), adjacent[j].getYCoord());
                         this.bot.mousePress(InputEvent.BUTTON3_DOWN_MASK);
                         this.bot.mouseRelease(InputEvent.BUTTON3_DOWN_MASK);
+
+                        counter++;
                     }
                 }
             }
         }
 
-        // making moves
-        for (int i = 0; i < this.gameBoard.getSize(); ++i) {
-            // variables
-            Cell cell = this.gameBoard.getCellAtIndex(i);
-            char cellContents = cell.getContents();
-            Cell[] adjacent = cell.getAdjacent();
+        if (counter != 0)
+            makeMoves();
 
-            if (cell.getContents() == 'E' || cell.getContents() == 'U' || cell.getContents() == 'F')
-                continue;
+        if (this.debug)
+            System.out.println("Advanced Mine Cases");
+        // after checking basic cases - Check for patterns
+        if (counter == 0) {
+            if (this.debug)
+                System.out.println("Checking patterns");
 
-            // make moves
-            if (cell.getAdjFlags() == Character.getNumericValue(cellContents) && !(cell.getNumUnlickedAdj() == 0)) {
-                for (int j = 0; j < adjacent.length; ++j) {
-                    if (cell.getNumUnlickedAdj() == 0)
-                        break;
+            for (int i = 0; i < this.gameBoard.getSize(); ++i) {
+                /*
+                 * these variables could all be declared outside of the for loop because they
+                 * are used in
+                 * multiple loops
+                 */
+                Cell cell = this.gameBoard.getCellAtIndex(i);
+                char cellContents = cell.getContents();
 
-                    if (adjacent[j] == null || cell.getContents() == 'E')
-                        continue;
+                if (cell.getContents() == 'E' || cell.getContents() == 'U' || cell.getContents() == 'F')
+                    continue;
 
-                    if (adjacent[j].getContents() == 'U') {
-                        this.bot.mouseMove(adjacent[j].getXCoord(), adjacent[j].getYCoord());
-                        this.bot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
-                        this.bot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
+                Patterns pattern = new Patterns(cell);
+
+                // 1 - 2 Pattern
+                if (Character.getNumericValue(cellContents) - cell.getAdjFlags() == 2) {
+                    if (pattern.onetwoPattern()) {
+                        if (this.debug)
+                            System.out.println("Found 1-2 Pattern.");
+                        // mark flag
+                        Cell mine = pattern.getMine();
+
+                        // mark flag
+                        mine.setContents('F');
+                        this.bot.mouseMove(mine.getXCoord(), mine.getYCoord());
+                        this.bot.mousePress(InputEvent.BUTTON3_DOWN_MASK);
+                        this.bot.mouseRelease(InputEvent.BUTTON3_DOWN_MASK);
                     }
                 }
-                syncBoard(false);
             }
+            makeMoves();
         }
-
         if (this.debug) {
             System.out.println("\nBoard State after flagging/moves: " + this.gameBoard + "\n");
         }
