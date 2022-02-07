@@ -66,8 +66,8 @@ public class Solver {
         System.out.println("Board calibrated.");
 
         // get initial board state
-        syncBoard(true);
-        System.exit(1);
+        syncBoard();
+
         // make first move
         this.bot.mouseMove(startCoord[0], startCoord[1]);
         this.bot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
@@ -76,7 +76,7 @@ public class Solver {
         // update board
         if (this.debug)
             System.out.print("\nFirst sync.");
-        syncBoard(false);
+        // syncBoard(false);
     }
 
     /**
@@ -199,16 +199,13 @@ public class Solver {
      * 
      * @param start If true, save the coordinates of the green X
      */
-    private void syncBoard(boolean start) {
+    private void syncBoard() {
         // let game have half a second to load
         try {
             Thread.sleep(250);
         } catch (InterruptedException e) {
             System.out.println(e);
         }
-
-        boolean breakStart = false;
-        int numUnclicked = 0;
 
         // x and y coordinates of the middle of the first cell
         int centerX = this.ul_x + ((this.cellSideLength - this.cellOffset) / 2) + 1;
@@ -217,8 +214,8 @@ public class Solver {
         // loop through entire board on screen
         // check center of cell's pixel color and create a String based on those colors
         // String boardState = "";
-        int[] xCoord = new int[this.gameBoard.getSize()];
-        int[] yCoord = new int[this.gameBoard.getSize()];
+        int xCoord;
+        int yCoord;
         for (int y = 0; y < this.gameBoard.getHeight(); ++y) {
             for (int x = 0; x < this.gameBoard.getWidth(); ++x) {
                 if (this.debug)
@@ -226,24 +223,25 @@ public class Solver {
                             centerY + (y * (this.cellSideLength)));
 
                 // set x and y coordinates of invidiual cells
-                xCoord[y * this.gameBoard.getWidth() + x] = centerX + (x * (this.cellSideLength));
-                yCoord[y * this.gameBoard.getWidth() + x] = centerY + (y * (this.cellSideLength));
+                xCoord = centerX + (x * (this.cellSideLength));
+                yCoord = centerY + (y * (this.cellSideLength));
+
+                this.gameBoard.getCellAtIndex(y * this.gameBoard.getWidth() + x).setCoords(xCoord, yCoord);
 
                 // color of center of cell
                 Color px = this.bot.getPixelColor(centerX + (x * (this.cellSideLength)),
                         centerY + (y * (this.cellSideLength)));
 
                 // distinguish between finding starting green x or not
-                if (start) {
-                    // start means everything is unclicked except for a single green x cell...
-                    // we'll mark this cell
 
-                    if (px.getRed() == 0 && px.getGreen() == 128 && px.getBlue() == 0) {
-                        this.startCoord[0] = centerX + (x * this.cellSideLength);
-                        this.startCoord[1] = centerY + (y * this.cellSideLength);
-                        breakStart = true;
-                    }
+                // start means everything is unclicked except for a single green x cell...
+                // we'll mark this cell
+
+                if (px.getRed() == 0 && px.getGreen() == 128 && px.getBlue() == 0) {
+                    this.startCoord[0] = xCoord;
+                    this.startCoord[1] = yCoord;
                 }
+
                 // else {
                 // // start = false
 
@@ -306,9 +304,9 @@ public class Solver {
         // return;
 
         // set x and y cell coordinates
-        for (int i = 0; i < this.gameBoard.getSize(); ++i) {
-            this.gameBoard.getCellAtIndex(i).setCoords(xCoord[i], yCoord[i]);
-        }
+        // for (int i = 0; i < this.gameBoard.getSize(); ++i) {
+        // this.gameBoard.getCellAtIndex(i).setCoords(xCoord[i], yCoord[i]);
+        // }
 
         // // update the board
         // this.gameBoard.updateBoard(boardState);
@@ -356,7 +354,7 @@ public class Solver {
                 }
             }
         }
-        syncBoard(false);
+        // syncBoard(false);
     }
 
     private void rightClick(Cell cell) {
