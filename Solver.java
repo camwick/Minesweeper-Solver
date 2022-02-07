@@ -467,7 +467,7 @@ public class Solver {
 
             // exit if infinite loop will occurr
             if (infiniteLoopCount == 0) {
-                System.out.println("Avoiding infinite loop...");
+                System.out.println("No solution found - avoiding infinite loop.\nEnding Program.");
                 System.exit(1);
             }
 
