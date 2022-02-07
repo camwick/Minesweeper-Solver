@@ -345,14 +345,24 @@ public class Solver {
                         continue;
 
                     if (adjacent[j].getContents() == 'U') {
-                        this.bot.mouseMove(adjacent[j].getXCoord(), adjacent[j].getYCoord());
-                        this.bot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
-                        this.bot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
+                        leftClick(adjacent[j]);
                     }
                 }
             }
         }
         syncBoard(false);
+    }
+
+    private void rightClick(Cell cell) {
+        this.bot.mouseMove(cell.getXCoord(), cell.getYCoord());
+        this.bot.mousePress(InputEvent.BUTTON3_DOWN_MASK);
+        this.bot.mouseRelease(InputEvent.BUTTON3_DOWN_MASK);
+    }
+
+    private void leftClick(Cell cell) {
+        this.bot.mouseMove(cell.getXCoord(), cell.getYCoord());
+        this.bot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
+        this.bot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
     }
 
     /**
@@ -368,7 +378,7 @@ public class Solver {
         int counter = 0;
 
         if (this.debug)
-            System.out.println("Basic Mine Cases");
+            System.out.println("\nBasic Mine Cases");
 
         // marks basic flags
         for (int i = 0; i < this.gameBoard.getSize(); ++i) {
@@ -393,9 +403,7 @@ public class Solver {
 
                     if (adjacent[j].getContents() == 'U') {
                         adjacent[j].setContents('F');
-                        this.bot.mouseMove(adjacent[j].getXCoord(), adjacent[j].getYCoord());
-                        this.bot.mousePress(InputEvent.BUTTON3_DOWN_MASK);
-                        this.bot.mouseRelease(InputEvent.BUTTON3_DOWN_MASK);
+                        rightClick(adjacent[j]);
 
                         counter++;
                     }
@@ -437,9 +445,7 @@ public class Solver {
 
                         // mark flag
                         mine.setContents('F');
-                        this.bot.mouseMove(mine.getXCoord(), mine.getYCoord());
-                        this.bot.mousePress(InputEvent.BUTTON3_DOWN_MASK);
-                        this.bot.mouseRelease(InputEvent.BUTTON3_DOWN_MASK);
+                        rightClick(mine);
                     }
                 }
             }
