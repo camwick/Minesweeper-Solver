@@ -22,7 +22,7 @@ public class Solver {
      *                   calibration
      * @throws InterruptedException
      */
-    public Solver(int difficulty, boolean debug, int width, int height, int mineCount) throws InterruptedException {
+    public Solver(int difficulty, boolean debug, int width, int height, int mineCount) {
         // set debug boolean
         this.debug = debug;
 
@@ -72,9 +72,10 @@ public class Solver {
         this.bot.mouseMove(startCoord[0], startCoord[1]);
         this.bot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
         this.bot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
-        Thread.sleep(500);
 
         // update board
+        if (this.debug)
+            System.out.print("\nFirst sync.");
         syncBoard(false);
     }
 
@@ -199,6 +200,13 @@ public class Solver {
      * @param start If true, save the coordinates of the green X
      */
     private void syncBoard(boolean start) {
+        // let game have half a second to load
+        try {
+            Thread.sleep(250);
+        } catch (InterruptedException e) {
+            System.out.println(e);
+        }
+
         boolean breakStart = false;
         int numUnclicked = 0;
 
@@ -372,13 +380,13 @@ public class Solver {
      */
     public void solve() {
         if (this.debug) {
-            System.out.println("Board state before flagging/moves: " + this.gameBoard);
+            System.out.println("\nBoard state before flagging/moves: " + this.gameBoard);
         }
 
         int counter = 0;
 
         if (this.debug)
-            System.out.println("\nBasic Mine Cases");
+            System.out.print("\nBasic Mine Cases.");
 
         // marks basic flags
         for (int i = 0; i < this.gameBoard.getSize(); ++i) {
@@ -413,13 +421,16 @@ public class Solver {
 
         if (counter != 0)
             makeMoves();
+        else if (this.debug)
+            System.out.print("\nNo basic cases.\n\n");
 
-        if (this.debug)
+        if (this.debug && counter == 0)
             System.out.println("Advanced Mine Cases");
+
         // after checking basic cases - Check for patterns
         if (counter == 0) {
             if (this.debug)
-                System.out.println("Checking patterns");
+                System.out.println("\nChecking patterns");
 
             for (int i = 0; i < this.gameBoard.getSize(); ++i) {
                 /*
