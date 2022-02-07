@@ -292,20 +292,6 @@ public class Solver {
             }
         }
 
-        // if (start)
-        // return;
-
-        // set x and y cell coordinates
-        // for (int i = 0; i < this.gameBoard.getSize(); ++i) {
-        // this.gameBoard.getCellAtIndex(i).setCoords(xCoord[i], yCoord[i]);
-        // }
-
-        // // update the board
-        // this.gameBoard.updateBoard(boardState);
-
-        // // update number of unclicked cells
-        // this.gameBoard.setNumOfUnclicked(numUnclicked);
-
         // debug info
         if (this.debug) {
             System.out.println(this.gameBoard);
