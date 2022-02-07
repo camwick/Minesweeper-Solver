@@ -72,7 +72,7 @@ public class Solver {
         this.bot.mouseMove(startCoord[0], startCoord[1]);
         this.bot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
         this.bot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
-
+        System.exit(1);
         // update board
         if (this.debug)
             System.out.print("\nFirst sync.");
@@ -200,20 +200,12 @@ public class Solver {
      * @param start If true, save the coordinates of the green X
      */
     private void syncBoard() {
-        // let game have half a second to load
-        try {
-            Thread.sleep(250);
-        } catch (InterruptedException e) {
-            System.out.println(e);
-        }
-
         // x and y coordinates of the middle of the first cell
         int centerX = this.ul_x + ((this.cellSideLength - this.cellOffset) / 2) + 1;
         int centerY = this.ul_y + ((this.cellSideLength - this.cellOffset) / 2) + 1;
 
         // loop through entire board on screen
-        // check center of cell's pixel color and create a String based on those colors
-        // String boardState = "";
+        // setting x/y coordinates of all cells and locating start position
         int xCoord;
         int yCoord;
         for (int y = 0; y < this.gameBoard.getHeight(); ++y) {
