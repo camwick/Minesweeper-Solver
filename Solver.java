@@ -432,6 +432,9 @@ public class Solver {
             if (this.debug)
                 System.out.println("\nChecking patterns");
 
+            // counter to end early to avoid inifite loop
+            int infiniteLoopCount = 0;
+
             for (int i = 0; i < this.gameBoard.getSize(); ++i) {
                 /*
                  * these variables could all be declared outside of the for loop because they
@@ -457,13 +460,18 @@ public class Solver {
                         // mark flag
                         mine.setContents('F');
                         rightClick(mine);
+                        infiniteLoopCount++;
                     }
                 }
             }
+
+            // exit if infinite loop will occurr
+            if (infiniteLoopCount == 0) {
+                System.out.println("Avoiding infinite loop...");
+                System.exit(1);
+            }
+
             makeMoves();
-        }
-        if (this.debug) {
-            System.out.println("\nBoard State after flagging/moves: " + this.gameBoard + "\n");
         }
 
         if (this.gameBoard.getUnclicked() != 0) {
