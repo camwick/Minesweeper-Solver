@@ -64,10 +64,11 @@ public class Solver {
         // get upper left-hand corner of game board
         System.out.println("Starting board calibration...\nPlease wait the few seconds this will take.");
         calibrateBoard();
-        System.out.println("Board calibrated.");
 
         // get initial board state
         syncBoard();
+
+        System.out.println("Board calibrated.");
 
         // make first move
         leftClick(startCell);
