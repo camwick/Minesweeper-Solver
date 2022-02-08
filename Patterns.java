@@ -5,47 +5,46 @@ public class Patterns {
     private Cell mine;
     private Cell cell;
 
+    /**
+     * Constructs a Pattern object that will recognize various mine patterns based
+     * on the cell provided and the called function.
+     * 
+     * @param cell Cell, mine pattern recognition acts upon Cell
+     */
     public Patterns(Cell cell) {
         this.cell = cell;
     }
 
+    /**
+     * 1-2 Pattern Recognition function.
+     * 
+     * if the board is
+     * U U U
+     * 1 2 1
+     * then
+     * F U F
+     * 1 2 1
+     * 
+     * also works vertically
+     * E 1 U
+     * E 2 U
+     * E 1 U
+     * then
+     * E 1 F
+     * E 2 U
+     * E 1 F
+     * 
+     * Note
+     * check horizontal first, only check for pattern if
+     * numeric value is 2. This is done in Solver.java
+     * 
+     * @return boolean, true if found a match
+     */
     public boolean onetwoPattern() {
-        // if the board is
-        // U U U
-        // 1 2 1
-        // then
-        // F U F
-        // 1 2 1
-
-        // also works vertically
-        // E 1 U
-        // E 2 U
-        // E 1 U
-        // then
-        // E 1 F
-        // E 2 U
-        // E 1 F
-
-        // also make sure to take into account the number of flags
-        // adjacent to the cell
-        // if the number is 2 but there is a flag already adjacent
-        // the 1 2 pattern will not work
-
-        Cell[] adjacent = this.cell.getAdjacent();
-
-        // check horizontal first, only check for pattern if
-        // numeric value is 2. This is done in Solver.java
-
-        // assuming cellContents == 2
-
-        // horizontal possibilities
-
-        // if the 1 is on the left of 2
-        // This currently only checks for mines above the pattern - add a below check as
-        // well
-
         if (this.cell.getNumUnlickedAdj() > 3)
             return false;
+
+        Cell[] adjacent = this.cell.getAdjacent();
 
         // 1 left of 2
         if (Character.getNumericValue(adjacent[3].getContents()) - adjacent[3].getAdjFlags() == 1) {
@@ -58,13 +57,11 @@ public class Patterns {
                 }
 
                 if (counter == 2) {
-                    // mark the mine
                     mine = adjacent[2];
-
-                    // flag mine
                     return true;
                 } else
                     return false;
+
                 // bottom left U
             } else if (adjacent[5].getContents() == 'U') {
                 int counter = 0;
@@ -73,17 +70,14 @@ public class Patterns {
                         counter++;
                 }
                 if (counter == 2) {
-                    // mark the mine
                     mine = adjacent[7];
-
-                    // flag mine
                     return true;
                 } else
                     return false;
             }
         }
 
-        // if the 1 is on the right of 2
+        // 1 right of 2
         if (Character.getNumericValue(adjacent[4].getContents()) - adjacent[4].getAdjFlags() == 1) {
             // top left U
             if (adjacent[0].getContents() == 'U') {
@@ -94,13 +88,11 @@ public class Patterns {
                 }
 
                 if (counter == 2) {
-                    // mark the mine
                     mine = adjacent[0];
-
-                    // flag mine
                     return true;
                 } else
                     return false;
+
                 // bottom left U
             } else if (adjacent[5].getContents() == 'U') {
                 int counter = 0;
@@ -109,19 +101,16 @@ public class Patterns {
                         counter++;
                 }
                 if (counter == 2) {
-                    // mark the mine
                     mine = adjacent[5];
-
-                    // flag mine
                     return true;
                 } else
                     return false;
             }
         }
 
-        // if the 1 is above the 2
+        // 1 above the 2
         if (Character.getNumericValue(adjacent[1].getContents()) - adjacent[1].getAdjFlags() == 1) {
-            // top left U
+            // top right U
             if (adjacent[2].getContents() == 'U') {
                 int counter = 0;
                 for (int i = 4; i <= 7; i += 3) {
@@ -130,14 +119,12 @@ public class Patterns {
                 }
 
                 if (counter == 2) {
-                    // mark the mine
                     mine = adjacent[7];
-
-                    // flag mine
                     return true;
                 } else
                     return false;
-                // bottom left U
+
+                // top left U
             } else if (adjacent[0].getContents() == 'U') {
                 int counter = 0;
                 for (int i = 3; i <= 5; i += 2) {
@@ -145,19 +132,16 @@ public class Patterns {
                         counter++;
                 }
                 if (counter == 2) {
-                    // mark the mine
                     mine = adjacent[5];
-
-                    // flag mine
                     return true;
                 } else
                     return false;
             }
         }
 
-        // if the 1 is below the 2
+        // 1 below the 2
         if (Character.getNumericValue(adjacent[6].getContents()) - adjacent[6].getAdjFlags() == 1) {
-            // top left U
+            // top right U
             if (adjacent[2].getContents() == 'U') {
                 int counter = 0;
                 for (int i = 4; i <= 7; i += 3) {
@@ -166,14 +150,12 @@ public class Patterns {
                 }
 
                 if (counter == 2) {
-                    // mark the mine
                     mine = adjacent[2];
-
-                    // flag mine
                     return true;
                 } else
                     return false;
-                // bottom left U
+
+                // top left U
             } else if (adjacent[0].getContents() == 'U') {
                 int counter = 0;
                 for (int i = 3; i <= 5; i += 2) {
@@ -181,20 +163,22 @@ public class Patterns {
                         counter++;
                 }
                 if (counter == 2) {
-                    // mark the mine
                     mine = adjacent[0];
-
-                    // flag mine
                     return true;
                 } else
                     return false;
             }
         }
 
-        // if no matches, returnf alse
+        // if no matches, return false
         return false;
     }
 
+    /**
+     * Returns mine position found by pattern recognition functions.
+     * 
+     * @return Cell, mine to mark
+     */
     Cell getMine() {
         return this.mine;
     }
