@@ -71,20 +71,15 @@ public class Solver {
 
         // make first move
         leftClick(startCell);
-        System.out.println(this.bot.getAutoDelay());
+
         // update Cells
-        // give game time to load
         try {
-            Thread.sleep(250);
+            Thread.sleep(100);
             updateCells(this.startCell);
-            // this.bot.setAutoDelay(0);
             this.gameBoard.resetUnclickedVisitedCells();
         } catch (InterruptedException e) {
             System.out.println(e);
         }
-
-        // if (this.debug)
-        // System.out.print("\nBoard State: " + this.gameBoard);
     }
 
     /**
@@ -235,26 +230,15 @@ public class Solver {
                 Color px = this.bot.getPixelColor(centerX + (x * (this.cellSideLength)),
                         centerY + (y * (this.cellSideLength)));
 
-                // distinguish between finding starting green x or not
-
-                // start means everything is unclicked except for a single green x cell...
-                // we'll mark this cell
-
+                // save position of first click
                 if (px.getRed() == 0 && px.getGreen() == 128 && px.getBlue() == 0) {
                     this.startCell = this.gameBoard.getCellAtIndex(y * this.gameBoard.getWidth() + x);
                 }
             }
         }
-
-        // debug info
-        // if (this.debug) {
-        // System.out.println(this.gameBoard);
-        // }
     }
 
     private void updateCells(Cell cell) {
-        // this.bot.setAutoDelay(25);
-
         // skip if already visited
         if (cell.isVisited())
             return;
@@ -264,8 +248,6 @@ public class Solver {
 
         // get pixel of given cell
         Color px = this.bot.getPixelColor(cell.getXCoord(), cell.getYCoord());
-
-        // matching the pixel color to a character
         char contents = '!';
 
         // gray pixel
@@ -325,14 +307,11 @@ public class Solver {
             cell.setContents(contents);
             this.gameBoard.setNumOfUnclicked(this.gameBoard.getUnclicked() - 1);
             cell.visit();
-            // System.out.println("TESTING" + this.gameBoard);
-        } else {
+        } else
             return;
-        }
 
         // if cell changed contents then check it's neighbors for changes
         Cell[] adjacent = cell.getAdjacent();
-
         for (int i = 0; i < adjacent.length; ++i) {
             if (adjacent[i] != null)
                 updateCells(adjacent[i]);
@@ -349,6 +328,7 @@ public class Solver {
     }
 
     private void makeMoves() {
+        // loop through entire board
         for (int i = 0; i < this.gameBoard.getSize(); ++i) {
             // variables
             Cell cell = this.gameBoard.getCellAtIndex(i);
@@ -361,9 +341,6 @@ public class Solver {
             // make moves
             if (cell.getAdjFlags() == Character.getNumericValue(cellContents) && cell.getNumUnlickedAdj() != 0) {
                 for (int j = 0; j < adjacent.length; ++j) {
-                    // if (cell.getNumUnlickedAdj() == 0)
-                    // break;
-
                     if (adjacent[j] == null)
                         continue;
 
@@ -412,7 +389,6 @@ public class Solver {
             Cell cell = this.gameBoard.getCellAtIndex(i);
             char cellContents = cell.getContents();
 
-            // skip empty/unclicked cells
             if (cellContents == 'E' || cellContents == 'U' || cellContents == 'F')
                 continue;
 
@@ -427,6 +403,7 @@ public class Solver {
                     if (adjacent[j] == null || adjacent[j].getContents() == 'F')
                         continue;
 
+                    // flag unclicked cell
                     if (adjacent[j].getContents() == 'U') {
                         adjacent[j].setContents('F');
                         rightClick(adjacent[j]);
@@ -449,8 +426,8 @@ public class Solver {
                 System.out.println("\nAfter making moves" + this.gameBoard);
         }
         // if no basic mines found -> check advanced patterns
-        else if (this.debug) {
-            {
+        else {
+            if (this.debug) {
                 System.out.print("\nNo basic cases.\n\n");
                 System.out.println("\nChecking patterns");
             }
