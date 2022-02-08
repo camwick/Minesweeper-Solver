@@ -3,6 +3,8 @@ public class Cell {
     private Cell[] adjacentCells;
     private int x;
     private int y;
+    private boolean visited;
+    private int index;
 
     /**
      * Default constructor.
@@ -20,7 +22,7 @@ public class Cell {
      */
     public Cell(char x) {
         this.contents = x;
-
+        this.visited = false;
         this.adjacentCells = new Cell[8];
     }
 
@@ -31,6 +33,10 @@ public class Cell {
      */
     public char getContents() {
         return this.contents;
+    }
+
+    public int getIndex() {
+        return this.index;
     }
 
     /**
@@ -104,6 +110,10 @@ public class Cell {
         this.contents = newContents;
     }
 
+    public void setIndex(int index) {
+        this.index = index;
+    }
+
     public void setCoords(int x, int y) {
         this.x = x;
         this.y = y;
@@ -118,6 +128,18 @@ public class Cell {
         for (int i = 0; i < x.length; ++i) {
             this.adjacentCells[i] = x[i];
         }
+    }
+
+    public void visit() {
+        this.visited = true;
+    }
+
+    public boolean isVisited() {
+        return this.visited;
+    }
+
+    public void resetVisited() {
+        this.visited = false;
     }
 
     /**
