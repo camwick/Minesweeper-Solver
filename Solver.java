@@ -238,6 +238,12 @@ public class Solver {
         }
     }
 
+    /**
+     * Recursively traverses the adjacent Cells to update the uncovered cells'
+     * contents
+     * 
+     * @param cell starting node of the graph DFS
+     */
     private void updateCells(Cell cell) {
         // skip if already visited
         if (cell.isVisited())
@@ -327,6 +333,9 @@ public class Solver {
         return this.gameBoard;
     }
 
+    /**
+     * Initiates left clicking on safe cells.
+     */
     private void makeMoves() {
         // loop through entire board
         for (int i = 0; i < this.gameBoard.getSize(); ++i) {
@@ -356,12 +365,22 @@ public class Solver {
         // this.bot.setAutoDelay(0);
     }
 
+    /**
+     * Right clicks the given cell.
+     * 
+     * @param cell
+     */
     private void rightClick(Cell cell) {
         this.bot.mouseMove(cell.getXCoord(), cell.getYCoord());
         this.bot.mousePress(InputEvent.BUTTON3_DOWN_MASK);
         this.bot.mouseRelease(InputEvent.BUTTON3_DOWN_MASK);
     }
 
+    /**
+     * Left clicks the given cell.
+     * 
+     * @param cell
+     */
     private void leftClick(Cell cell) {
         this.bot.mouseMove(cell.getXCoord(), cell.getYCoord());
         this.bot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
