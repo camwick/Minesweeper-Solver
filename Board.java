@@ -265,6 +265,12 @@ public class Board {
         }
     }
 
+    public void resetVisitedCells() {
+        for (int i = 0; i < this.board.length; ++i) {
+            this.board[i].resetVisited();
+        }
+    }
+
     /**
      * Outputs a string of a board object in a pretty fasion :)
      */
