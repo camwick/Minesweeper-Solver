@@ -265,9 +265,10 @@ public class Board {
         }
     }
 
-    public void resetVisitedCells() {
+    public void resetUnclickedVisitedCells() {
         for (int i = 0; i < this.board.length; ++i) {
-            this.board[i].resetVisited();
+            if (this.board[i].getContents() == 'U')
+                this.board[i].resetVisited();
         }
     }
 
