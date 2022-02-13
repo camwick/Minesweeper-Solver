@@ -13,6 +13,7 @@ public class Solver {
     private int cellOffset;
     private boolean debug = false;
     private Cell startCell;
+    private boolean infiniteLoop = true;
 
     /**
      * Constructor with debugging information.
@@ -64,27 +65,23 @@ public class Solver {
         // get upper left-hand corner of game board
         System.out.println("Starting board calibration...\nPlease wait the few seconds this will take.");
         calibrateBoard();
-        System.out.println("Board calibrated.");
 
         // get initial board state
         syncBoard();
 
+        System.out.println("Board calibrated.");
+
         // make first move
         leftClick(startCell);
-        System.out.println(this.bot.getAutoDelay());
+
         // update Cells
-        // give game time to load
         try {
-            Thread.sleep(250);
+            Thread.sleep(100);
             updateCells(this.startCell);
-            // this.bot.setAutoDelay(0);
             this.gameBoard.resetUnclickedVisitedCells();
         } catch (InterruptedException e) {
             System.out.println(e);
         }
-
-        // if (this.debug)
-        // System.out.print("\nBoard State: " + this.gameBoard);
     }
 
     /**
@@ -235,26 +232,21 @@ public class Solver {
                 Color px = this.bot.getPixelColor(centerX + (x * (this.cellSideLength)),
                         centerY + (y * (this.cellSideLength)));
 
-                // distinguish between finding starting green x or not
-
-                // start means everything is unclicked except for a single green x cell...
-                // we'll mark this cell
-
+                // save position of first click
                 if (px.getRed() == 0 && px.getGreen() == 128 && px.getBlue() == 0) {
                     this.startCell = this.gameBoard.getCellAtIndex(y * this.gameBoard.getWidth() + x);
                 }
             }
         }
-
-        // debug info
-        // if (this.debug) {
-        // System.out.println(this.gameBoard);
-        // }
     }
 
+    /**
+     * Recursively traverses the adjacent Cells to update the uncovered cells'
+     * contents
+     * 
+     * @param cell starting node of the graph DFS
+     */
     private void updateCells(Cell cell) {
-        // this.bot.setAutoDelay(25);
-
         // skip if already visited
         if (cell.isVisited())
             return;
@@ -264,8 +256,6 @@ public class Solver {
 
         // get pixel of given cell
         Color px = this.bot.getPixelColor(cell.getXCoord(), cell.getYCoord());
-
-        // matching the pixel color to a character
         char contents = '!';
 
         // gray pixel
@@ -325,14 +315,11 @@ public class Solver {
             cell.setContents(contents);
             this.gameBoard.setNumOfUnclicked(this.gameBoard.getUnclicked() - 1);
             cell.visit();
-            // System.out.println("TESTING" + this.gameBoard);
-        } else {
+        } else
             return;
-        }
 
         // if cell changed contents then check it's neighbors for changes
         Cell[] adjacent = cell.getAdjacent();
-
         for (int i = 0; i < adjacent.length; ++i) {
             if (adjacent[i] != null)
                 updateCells(adjacent[i]);
@@ -348,7 +335,11 @@ public class Solver {
         return this.gameBoard;
     }
 
+    /**
+     * Initiates left clicking on safe cells.
+     */
     private void makeMoves() {
+        // loop through entire board
         for (int i = 0; i < this.gameBoard.getSize(); ++i) {
             // variables
             Cell cell = this.gameBoard.getCellAtIndex(i);
@@ -361,17 +352,14 @@ public class Solver {
             // make moves
             if (cell.getAdjFlags() == Character.getNumericValue(cellContents) && cell.getNumUnlickedAdj() != 0) {
                 for (int j = 0; j < adjacent.length; ++j) {
-                    // if (cell.getNumUnlickedAdj() == 0)
-                    // break;
-
                     if (adjacent[j] == null)
                         continue;
 
                     if (adjacent[j].getContents() == 'U') {
                         leftClick(adjacent[j]);
-
                         updateCells(adjacent[j]);
                         this.gameBoard.resetUnclickedVisitedCells();
+                        this.infiniteLoop = false;
                     }
                 }
             }
@@ -379,12 +367,22 @@ public class Solver {
         // this.bot.setAutoDelay(0);
     }
 
+    /**
+     * Right clicks the given cell.
+     * 
+     * @param cell
+     */
     private void rightClick(Cell cell) {
         this.bot.mouseMove(cell.getXCoord(), cell.getYCoord());
         this.bot.mousePress(InputEvent.BUTTON3_DOWN_MASK);
         this.bot.mouseRelease(InputEvent.BUTTON3_DOWN_MASK);
     }
 
+    /**
+     * Left clicks the given cell.
+     * 
+     * @param cell
+     */
     private void leftClick(Cell cell) {
         this.bot.mouseMove(cell.getXCoord(), cell.getYCoord());
         this.bot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
@@ -412,7 +410,6 @@ public class Solver {
             Cell cell = this.gameBoard.getCellAtIndex(i);
             char cellContents = cell.getContents();
 
-            // skip empty/unclicked cells
             if (cellContents == 'E' || cellContents == 'U' || cellContents == 'F')
                 continue;
 
@@ -427,6 +424,7 @@ public class Solver {
                     if (adjacent[j] == null || adjacent[j].getContents() == 'F')
                         continue;
 
+                    // flag unclicked cell
                     if (adjacent[j].getContents() == 'U') {
                         adjacent[j].setContents('F');
                         rightClick(adjacent[j]);
@@ -449,14 +447,14 @@ public class Solver {
                 System.out.println("\nAfter making moves" + this.gameBoard);
         }
         // if no basic mines found -> check advanced patterns
-        else if (this.debug) {
-            {
+        else {
+            if (this.debug) {
                 System.out.print("\nNo basic cases.\n\n");
                 System.out.println("\nChecking patterns");
             }
 
             // assume infinite loop
-            boolean infiniteLoop = true;
+            this.infiniteLoop = true;
 
             // advanced patterns
             for (int i = 0; i < this.gameBoard.getSize(); ++i) {
@@ -473,6 +471,7 @@ public class Solver {
                 Patterns pattern = new Patterns(cell);
 
                 // 1 - 2 Pattern
+                // check for a two
                 if (Character.getNumericValue(cellContents) - cell.getAdjFlags() == 2) {
                     if (pattern.onetwoPattern()) {
                         if (this.debug)
@@ -483,7 +482,28 @@ public class Solver {
                         // mark flag
                         mine.setContents('F');
                         rightClick(mine);
-                        infiniteLoop = false;
+                        this.infiniteLoop = false;
+                    }
+                }
+
+                // 1-1 Pattern
+                // check for a one
+                if (cell.getNumUnlickedAdj() == 2
+                        && Character.getNumericValue(cellContents) - cell.getAdjFlags() == 1) {
+                    if (pattern.oneOnePattern()) {
+                        if (this.debug)
+                            System.out.println("Found 1-1 Pattern.");
+
+                        Cell[] safeCells = pattern.getSafeCells();
+                        for (int j = 0; j < safeCells.length; ++j) {
+                            if (safeCells[j] != null) {
+                                leftClick(safeCells[j]);
+                                updateCells(safeCells[j]);
+                                this.gameBoard.resetUnclickedVisitedCells();
+                                this.infiniteLoop = false;
+                            }
+                        }
+
                     }
                 }
             }
@@ -494,7 +514,7 @@ public class Solver {
             makeMoves();
 
             // exit if infinite loop will occurr
-            if (infiniteLoop) {
+            if (this.infiniteLoop) {
                 System.out.println("No solution found - avoiding infinite loop.\nEnding Program.");
                 System.out.println("State of board" + this.gameBoard);
                 System.exit(1);

@@ -265,6 +265,9 @@ public class Board {
         }
     }
 
+    /**
+     * Loops through board and resets all unclicked cells' visited boolean.
+     */
     public void resetUnclickedVisitedCells() {
         for (int i = 0; i < this.board.length; ++i) {
             if (this.board[i].getContents() == 'U')
