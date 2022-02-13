@@ -13,6 +13,7 @@ public class Solver {
     private int cellOffset;
     private boolean debug = false;
     private Cell startCell;
+    private boolean infiniteLoop = true;
 
     /**
      * Constructor with debugging information.
@@ -356,9 +357,9 @@ public class Solver {
 
                     if (adjacent[j].getContents() == 'U') {
                         leftClick(adjacent[j]);
-
                         updateCells(adjacent[j]);
                         this.gameBoard.resetUnclickedVisitedCells();
+                        this.infiniteLoop = false;
                     }
                 }
             }
@@ -453,7 +454,7 @@ public class Solver {
             }
 
             // assume infinite loop
-            boolean infiniteLoop = true;
+            this.infiniteLoop = true;
 
             // advanced patterns
             for (int i = 0; i < this.gameBoard.getSize(); ++i) {
@@ -470,6 +471,7 @@ public class Solver {
                 Patterns pattern = new Patterns(cell);
 
                 // 1 - 2 Pattern
+                // check for a two
                 if (Character.getNumericValue(cellContents) - cell.getAdjFlags() == 2) {
                     if (pattern.onetwoPattern()) {
                         if (this.debug)
@@ -480,7 +482,28 @@ public class Solver {
                         // mark flag
                         mine.setContents('F');
                         rightClick(mine);
-                        infiniteLoop = false;
+                        this.infiniteLoop = false;
+                    }
+                }
+
+                // 1-1 Pattern
+                // check for a one
+                if (cell.getNumUnlickedAdj() == 2
+                        && Character.getNumericValue(cellContents) - cell.getAdjFlags() == 1) {
+                    if (pattern.oneOnePattern()) {
+                        if (this.debug)
+                            System.out.println("Found 1-1 Pattern.");
+
+                        Cell[] safeCells = pattern.getSafeCells();
+                        for (int j = 0; j < safeCells.length; ++j) {
+                            if (safeCells[j] != null) {
+                                leftClick(safeCells[j]);
+                                updateCells(safeCells[j]);
+                                this.gameBoard.resetUnclickedVisitedCells();
+                                this.infiniteLoop = false;
+                            }
+                        }
+
                     }
                 }
             }
@@ -491,7 +514,7 @@ public class Solver {
             makeMoves();
 
             // exit if infinite loop will occurr
-            if (infiniteLoop) {
+            if (this.infiniteLoop) {
                 System.out.println("No solution found - avoiding infinite loop.\nEnding Program.");
                 System.out.println("State of board" + this.gameBoard);
                 System.exit(1);

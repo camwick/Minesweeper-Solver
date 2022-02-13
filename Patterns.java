@@ -4,6 +4,7 @@ public class Patterns {
     // if the pattern exists, then the work will be done in Solver.java
     private Cell mine;
     private Cell cell;
+    private Cell[] safeCells;
 
     /**
      * Constructs a Pattern object that will recognize various mine patterns based
@@ -13,6 +14,7 @@ public class Patterns {
      */
     public Patterns(Cell cell) {
         this.cell = cell;
+        this.safeCells = new Cell[3];
     }
 
     /**
@@ -174,6 +176,92 @@ public class Patterns {
         return false;
     }
 
+    public boolean oneOnePattern() {
+        Cell[] adjacents = this.cell.getAdjacent();
+
+        // 1 to right
+        if (adjacents[4] != null
+                && Character.getNumericValue(adjacents[4].getContents()) - adjacents[4].getAdjFlags() == 1) {
+            if ((adjacents[1].getContents() == 'U' && adjacents[2].getContents() == 'U')
+                    || adjacents[6].getContents() == 'U' && adjacents[7].getContents() == 'U') {
+                int index = 0;
+                for (int i = 2; i < adjacents.length; ++i) {
+                    if (adjacents[4].getAdjacent()[i] == null)
+                        continue;
+
+                    if (i == 2 || i == 4 || i == 7) {
+                        if (adjacents[4].getAdjacent()[i].getContents() == 'U') {
+                            safeCells[index] = adjacents[4].getAdjacent()[i];
+                            index++;
+                        }
+                    }
+                }
+                return true;
+            }
+        }
+
+        // 1 to left
+        if (adjacents[3] != null
+                && Character.getNumericValue(adjacents[3].getContents()) - adjacents[3].getAdjFlags() == 1) {
+            if ((adjacents[0].getContents() == 'U' && adjacents[1].getContents() == 'U')
+                    || adjacents[5].getContents() == 'U' && adjacents[6].getContents() == 'U') {
+                int index = 0;
+                for (int i = 0; i < adjacents.length - 2; ++i) {
+                    if (adjacents[3].getAdjacent()[i] == null)
+                        continue;
+
+                    if (i == 0 || i == 3 || i == 5) {
+                        if (adjacents[3].getAdjacent()[i].getContents() == 'U') {
+                            safeCells[index] = adjacents[3].getAdjacent()[i];
+                            index++;
+                        }
+                    }
+                }
+                return true;
+            }
+        }
+
+        // 1 above
+        if (adjacents[1] != null
+                && Character.getNumericValue(adjacents[1].getContents()) - adjacents[1].getAdjFlags() == 1) {
+            if ((adjacents[0].getContents() == 'U' && adjacents[3].getContents() == 'U')
+                    || adjacents[2].getContents() == 'U' && adjacents[4].getContents() == 'U') {
+                int index = 0;
+                for (int i = 0; i < 3; ++i) {
+                    if (adjacents[1].getAdjacent()[i] == null)
+                        continue;
+
+                    if (adjacents[1].getAdjacent()[i].getContents() == 'U') {
+                        safeCells[index] = adjacents[1].getAdjacent()[i];
+                        index++;
+                    }
+                }
+                return true;
+            }
+        }
+
+        // 1 below
+        if (adjacents[6] != null
+                && Character.getNumericValue(adjacents[6].getContents()) - adjacents[6].getAdjFlags() == 1) {
+            if ((adjacents[3].getContents() == 'U' && adjacents[5].getContents() == 'U')
+                    || adjacents[4].getContents() == 'U' && adjacents[7].getContents() == 'U') {
+                int index = 0;
+                for (int i = 5; i < adjacents.length; ++i) {
+                    if (adjacents[6].getAdjacent()[i] == null)
+                        continue;
+
+                    if (adjacents[6].getAdjacent()[i].getContents() == 'U') {
+                        safeCells[index] = adjacents[6].getAdjacent()[i];
+                        index++;
+                    }
+                }
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     /**
      * Returns mine position found by pattern recognition functions.
      * 
@@ -181,5 +269,9 @@ public class Patterns {
      */
     Cell getMine() {
         return this.mine;
+    }
+
+    Cell[] getSafeCells() {
+        return this.safeCells;
     }
 }
