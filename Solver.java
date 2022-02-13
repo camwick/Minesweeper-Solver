@@ -506,7 +506,32 @@ public class Solver {
 
                     }
                 }
+
+                // hole Pattern
+                if (cell.getNumUnlickedAdj() - 1 == Character.getNumericValue(cellContents) - cell.getAdjFlags()) {
+                    System.out.println("HOLE CANDIDATE");
+                    if (pattern.holePattern()) {
+                        if (this.debug) {
+                            System.out.println("Found hole Pattern.");
+                        }
+
+                        Cell[] safeCells = pattern.getSafeCells();
+                        for (int j = 0; j < safeCells.length; ++j) {
+                            if (safeCells[j] != null) {
+                                leftClick(safeCells[j]);
+                                updateCells(safeCells[j]);
+                                this.gameBoard.resetUnclickedVisitedCells();
+                                this.infiniteLoop = false;
+                            }
+                        }
+                    }
+                }
             }
+
+            /**
+             * not including the two cells adjacent to the hole:
+             * - trunk of the hole needs one less unclickedAdj not including around the hole
+             */
 
             if (this.debug)
                 System.out.println("Advanced cases" + this.gameBoard);
