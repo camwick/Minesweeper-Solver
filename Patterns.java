@@ -262,6 +262,74 @@ public class Patterns {
         return false;
     }
 
+    boolean holePattern() {
+        Cell[] adjacents = this.cell.getAdjacent();
+
+        // safe to left
+        if (adjacents[2] != null && adjacents[7] != null && adjacents[2].getContents() == 'U'
+                && adjacents[7].getContents() == 'U'
+                && Character.getNumericValue(adjacents[4].getContents()) - adjacents[4].getAdjFlags() == 1) {
+            if (adjacents[4].getAdjacent()[4] != null && (adjacents[4].getAdjacent()[2].getContents() == 'U'
+                    || adjacents[4].getAdjacent()[4].getContents() == 'U'
+                    || adjacents[4].getAdjacent()[7].getContents() == 'U')) {
+                this.safeCells[0] = adjacents[4].getAdjacent()[2];
+                this.safeCells[1] = adjacents[4].getAdjacent()[4];
+                this.safeCells[2] = adjacents[4].getAdjacent()[7];
+
+                return true;
+            }
+        }
+
+        // safe to right
+        if (adjacents[0] != null && adjacents[5] != null && adjacents[0].getContents() == 'U'
+                && adjacents[5].getContents() == 'U'
+                && Character.getNumericValue(adjacents[3].getContents()) - adjacents[3].getAdjFlags() == 1) {
+            if (adjacents[3].getAdjacent()[3] != null && (adjacents[3].getAdjacent()[0].getContents() == 'U'
+                    || adjacents[3].getAdjacent()[3].getContents() == 'U'
+                    || adjacents[3].getAdjacent()[5].getContents() == 'U')) {
+                this.safeCells[0] = adjacents[3].getAdjacent()[0];
+                this.safeCells[1] = adjacents[3].getAdjacent()[3];
+                this.safeCells[2] = adjacents[3].getAdjacent()[5];
+
+                return true;
+            }
+
+        }
+
+        // safe above
+        if (adjacents[5] != null && adjacents[7] != null && adjacents[5].getContents() == 'U'
+                && adjacents[7].getContents() == 'U'
+                && Character.getNumericValue(adjacents[6].getContents()) - adjacents[6].getAdjFlags() == 1) {
+            if (adjacents[6].getAdjacent()[6] != null && (adjacents[6].getAdjacent()[5].getContents() == 'U'
+                    || adjacents[6].getAdjacent()[6].getContents() == 'U'
+                    || adjacents[6].getAdjacent()[7].getContents() == 'U')) {
+                int index = 0;
+                for (int i = 5; i <= 7; ++i) {
+                    this.safeCells[index] = adjacents[6].getAdjacent()[i];
+                    index++;
+                }
+                return true;
+            }
+
+        }
+
+        // safe below
+        if (adjacents[0] != null && adjacents[2] != null && adjacents[0].getContents() == 'U'
+                && adjacents[2].getContents() == 'U'
+                && Character.getNumericValue(adjacents[1].getContents()) - adjacents[1].getAdjFlags() == 1) {
+            if (adjacents[1].getAdjacent()[1] != null && (adjacents[1].getAdjacent()[0].getContents() == 'U'
+                    || adjacents[1].getAdjacent()[1].getContents() == 'U'
+                    || adjacents[1].getAdjacent()[2].getContents() == 'U')) {
+                for (int i = 0; i <= 2; ++i) {
+                    this.safeCells[i] = adjacents[1].getAdjacent()[i];
+                }
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     /**
      * Returns mine position found by pattern recognition functions.
      * 
