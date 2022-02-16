@@ -10,8 +10,8 @@ Make sure to create a pull request before merging to main.
 
 ## Working On:
 
-- 1-2 mine patter
-- mine pattern recognition
+- hole pattern
+- more mine pattern recognition
 
 ## Goals:
 
