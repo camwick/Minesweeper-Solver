@@ -1,4 +1,5 @@
 import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
 
 public class Main {
   public static void main(String[] args) throws InterruptedException {
@@ -45,9 +46,16 @@ public class Main {
     input.close();
 
     // create solver object
+    long startTime = System.nanoTime();
     Solver game = new Solver(difficulty, debug, width, height, mineCount);
 
     // start solving
+    long solveStart = System.nanoTime();
     game.solve();
+    long endTime = System.nanoTime();
+
+    System.out.println("\nElapsed Execution Time: "
+        + (endTime - startTime) / 1000000000.0 + "s");
+    System.out.println("Solve time: " + (solveStart - startTime) / 1000000000.0 + "s");
   }
 }
