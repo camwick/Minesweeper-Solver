@@ -48,134 +48,132 @@ public class Patterns {
 
         Cell[] adjacent = this.cell.getAdjacent();
 
-        try{
-            // 1 left of 2
-            if (Character.getNumericValue(adjacent[3].getContents()) - adjacent[3].getAdjFlags() == 1) {
-                // top left U
-                if (adjacent[0].getContents() == 'U') {
-                    int counter = 0;
-                    for (int i = 1; i <= 2; ++i) {
-                        if (adjacent[i].getContents() == 'U')
-                            counter++;
-                    }
-
-                    if (counter == 2) {
-                        mine = adjacent[2];
-                        return true;
-                    } else
-                        return false;
-
-                    // bottom left U
-                } else if (adjacent[5].getContents() == 'U') {
-                    int counter = 0;
-                    for (int i = 6; i <= 7; ++i) {
-                        if (adjacent[i].getContents() == 'U')
-                            counter++;
-                    }
-                    if (counter == 2) {
-                        mine = adjacent[7];
-                        return true;
-                    } else
-                        return false;
+        // 1 left of 2
+        if (adjacent[3] != null
+                && Character.getNumericValue(adjacent[3].getContents()) - adjacent[3].getAdjFlags() == 1) {
+            // top left U
+            if (adjacent[0].getContents() == 'U') {
+                int counter = 0;
+                for (int i = 1; i <= 2; ++i) {
+                    if (adjacent[i].getContents() == 'U')
+                        counter++;
                 }
-            }
 
-            // 1 right of 2
-            if (Character.getNumericValue(adjacent[4].getContents()) - adjacent[4].getAdjFlags() == 1) {
-                // top left U
-                if (adjacent[0].getContents() == 'U') {
-                    int counter = 0;
-                    for (int i = 1; i <= 2; ++i) {
-                        if (adjacent[i].getContents() == 'U')
-                            counter++;
-                    }
+                if (counter == 2) {
+                    mine = adjacent[2];
+                    return true;
+                } else
+                    return false;
 
-                    if (counter == 2) {
-                        mine = adjacent[0];
-                        return true;
-                    } else
-                        return false;
-
-                    // bottom left U
-                } else if (adjacent[5].getContents() == 'U') {
-                    int counter = 0;
-                    for (int i = 6; i <= 7; ++i) {
-                        if (adjacent[i].getContents() == 'U')
-                            counter++;
-                    }
-                    if (counter == 2) {
-                        mine = adjacent[5];
-                        return true;
-                    } else
-                        return false;
+                // bottom left U
+            } else if (adjacent[5].getContents() == 'U') {
+                int counter = 0;
+                for (int i = 6; i <= 7; ++i) {
+                    if (adjacent[i].getContents() == 'U')
+                        counter++;
                 }
-            }
-
-            // 1 above the 2
-            if (Character.getNumericValue(adjacent[1].getContents()) - adjacent[1].getAdjFlags() == 1) {
-                // top right U
-                if (adjacent[2].getContents() == 'U') {
-                    int counter = 0;
-                    for (int i = 4; i <= 7; i += 3) {
-                        if (adjacent[i].getContents() == 'U')
-                            counter++;
-                    }
-
-                    if (counter == 2) {
-                        mine = adjacent[7];
-                        return true;
-                    } else
-                        return false;
-
-                    // top left U
-                } else if (adjacent[0].getContents() == 'U') {
-                    int counter = 0;
-                    for (int i = 3; i <= 5; i += 2) {
-                        if (adjacent[i].getContents() == 'U')
-                            counter++;
-                    }
-                    if (counter == 2) {
-                        mine = adjacent[5];
-                        return true;
-                    } else
-                        return false;
-                }
-            }
-
-            // 1 below the 2
-            if (Character.getNumericValue(adjacent[6].getContents()) - adjacent[6].getAdjFlags() == 1) {
-                // top right U
-                if (adjacent[2].getContents() == 'U') {
-                    int counter = 0;
-                    for (int i = 4; i <= 7; i += 3) {
-                        if (adjacent[i].getContents() == 'U')
-                            counter++;
-                    }
-
-                    if (counter == 2) {
-                        mine = adjacent[2];
-                        return true;
-                    } else
-                        return false;
-
-                    // top left U
-                } else if (adjacent[0].getContents() == 'U') {
-                    int counter = 0;
-                    for (int i = 3; i <= 5; i += 2) {
-                        if (adjacent[i].getContents() == 'U')
-                            counter++;
-                    }
-                    if (counter == 2) {
-                        mine = adjacent[0];
-                        return true;
-                    } else
-                        return false;
-                }
+                if (counter == 2) {
+                    mine = adjacent[7];
+                    return true;
+                } else
+                    return false;
             }
         }
-        catch(java.lang.NullPointerException exception){
-            System.out.println("Caught: " + exception + " in 1-2 Pattern check\n");
-            return false;
+
+        // 1 right of 2
+        if (adjacent[4] != null
+                && Character.getNumericValue(adjacent[4].getContents()) - adjacent[4].getAdjFlags() == 1) {
+            // top left U
+            if (adjacent[0].getContents() == 'U') {
+                int counter = 0;
+                for (int i = 1; i <= 2; ++i) {
+                    if (adjacent[i].getContents() == 'U')
+                        counter++;
+                }
+
+                if (counter == 2) {
+                    mine = adjacent[0];
+                    return true;
+                } else
+                    return false;
+
+                // bottom left U
+            } else if (adjacent[5].getContents() == 'U') {
+                int counter = 0;
+                for (int i = 6; i <= 7; ++i) {
+                    if (adjacent[i].getContents() == 'U')
+                        counter++;
+                }
+                if (counter == 2) {
+                    mine = adjacent[5];
+                    return true;
+                } else
+                    return false;
+            }
+        }
+
+        // 1 above the 2
+        if (adjacent[1] != null
+                && Character.getNumericValue(adjacent[1].getContents()) - adjacent[1].getAdjFlags() == 1) {
+            // top right U
+            if (adjacent[2].getContents() == 'U') {
+                int counter = 0;
+                for (int i = 4; i <= 7; i += 3) {
+                    if (adjacent[i].getContents() == 'U')
+                        counter++;
+                }
+
+                if (counter == 2) {
+                    mine = adjacent[7];
+                    return true;
+                } else
+                    return false;
+
+                // top left U
+            } else if (adjacent[0].getContents() == 'U') {
+                int counter = 0;
+                for (int i = 3; i <= 5; i += 2) {
+                    if (adjacent[i].getContents() == 'U')
+                        counter++;
+                }
+                if (counter == 2) {
+                    mine = adjacent[5];
+                    return true;
+                } else
+                    return false;
+            }
+        }
+
+        // 1 below the 2
+        if (adjacent[6] != null
+                && Character.getNumericValue(adjacent[6].getContents()) - adjacent[6].getAdjFlags() == 1) {
+            // top right U
+            if (adjacent[2].getContents() == 'U') {
+                int counter = 0;
+                for (int i = 4; i <= 7; i += 3) {
+                    if (adjacent[i].getContents() == 'U')
+                        counter++;
+                }
+
+                if (counter == 2) {
+                    mine = adjacent[2];
+                    return true;
+                } else
+                    return false;
+
+                // top left U
+            } else if (adjacent[0].getContents() == 'U') {
+                int counter = 0;
+                for (int i = 3; i <= 5; i += 2) {
+                    if (adjacent[i].getContents() == 'U')
+                        counter++;
+                }
+                if (counter == 2) {
+                    mine = adjacent[0];
+                    return true;
+                } else
+                    return false;
+            }
         }
 
         // if no matches, return false
@@ -188,8 +186,9 @@ public class Patterns {
         // 1 to right
         if (adjacents[4] != null
                 && Character.getNumericValue(adjacents[4].getContents()) - adjacents[4].getAdjFlags() == 1) {
-            if ((adjacents[1].getContents() == 'U' && adjacents[2].getContents() == 'U')
-                    || adjacents[6].getContents() == 'U' && adjacents[7].getContents() == 'U') {
+            if ((adjacents[1] != null && adjacents[1].getContents() == 'U' && adjacents[2].getContents() == 'U')
+                    || (adjacents[6] != null && adjacents[6].getContents() == 'U'
+                            && adjacents[7].getContents() == 'U')) {
                 int index = 0;
                 for (int i = 2; i < adjacents.length; ++i) {
                     if (adjacents[4].getAdjacent()[i] == null)
@@ -209,8 +208,9 @@ public class Patterns {
         // 1 to left
         if (adjacents[3] != null
                 && Character.getNumericValue(adjacents[3].getContents()) - adjacents[3].getAdjFlags() == 1) {
-            if ((adjacents[0].getContents() == 'U' && adjacents[1].getContents() == 'U')
-                    || adjacents[5].getContents() == 'U' && adjacents[6].getContents() == 'U') {
+            if ((adjacents[0] != null && adjacents[0].getContents() == 'U' && adjacents[1].getContents() == 'U')
+                    || (adjacents[5] != null && adjacents[5].getContents() == 'U'
+                            && adjacents[6].getContents() == 'U')) {
                 int index = 0;
                 for (int i = 0; i < adjacents.length - 2; ++i) {
                     if (adjacents[3].getAdjacent()[i] == null)
@@ -230,8 +230,9 @@ public class Patterns {
         // 1 above
         if (adjacents[1] != null
                 && Character.getNumericValue(adjacents[1].getContents()) - adjacents[1].getAdjFlags() == 1) {
-            if ((adjacents[0].getContents() == 'U' && adjacents[3].getContents() == 'U')
-                    || adjacents[2].getContents() == 'U' && adjacents[4].getContents() == 'U') {
+            if ((adjacents[0] != null && adjacents[0].getContents() == 'U' && adjacents[3].getContents() == 'U')
+                    || (adjacents[2] != null && adjacents[2].getContents() == 'U'
+                            && adjacents[4].getContents() == 'U')) {
                 int index = 0;
                 for (int i = 0; i < 3; ++i) {
                     if (adjacents[1].getAdjacent()[i] == null)
@@ -249,8 +250,9 @@ public class Patterns {
         // 1 below
         if (adjacents[6] != null
                 && Character.getNumericValue(adjacents[6].getContents()) - adjacents[6].getAdjFlags() == 1) {
-            if ((adjacents[3].getContents() == 'U' && adjacents[5].getContents() == 'U')
-                    || adjacents[4].getContents() == 'U' && adjacents[7].getContents() == 'U') {
+            if ((adjacents[3] != null && adjacents[3].getContents() == 'U' && adjacents[5].getContents() == 'U')
+                    || (adjacents[4] != null && adjacents[4].getContents() == 'U'
+                            && adjacents[7].getContents() == 'U')) {
                 int index = 0;
                 for (int i = 5; i < adjacents.length; ++i) {
                     if (adjacents[6].getAdjacent()[i] == null)
@@ -264,7 +266,6 @@ public class Patterns {
                 return true;
             }
         }
-
 
         return false;
     }
