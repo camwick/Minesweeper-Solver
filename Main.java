@@ -2,6 +2,10 @@ import java.util.Scanner;
 
 public class Main {
   public static void main(String[] args) throws InterruptedException {
+    System.out.println("Before running the program, ensure browser zoom is set to 100%.");
+    System.out.println("The smaller the in-game board zoom the better.");
+    System.out.println("We've found that a zoom of 40 or lower seems to work best.\n");
+
     // variables
     Scanner input = new Scanner(System.in);
 
@@ -30,18 +34,20 @@ public class Main {
 
     // grab debug state
     boolean debug = false;
-    System.out.print("\nDebug on? [y/n]: ");
+    System.out.println("\nWith debug on, the mouse cursor will move whenever the program is checking pixel positions.");
+    System.out.println("Messages will also be printed to the console window (board state, error messages, etc...).");
+    System.out.print("Debug on? [y/n]: ");
     String ans = input.nextLine().toLowerCase().trim();
     if (ans.equals("y"))
       debug = true;
     System.out.println();
+
+    input.close();
 
     // create solver object
     Solver game = new Solver(difficulty, debug, width, height, mineCount);
 
     // start solving
     game.solve();
-
-    input.close();
   }
 }

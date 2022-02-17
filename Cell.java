@@ -3,6 +3,8 @@ public class Cell {
     private Cell[] adjacentCells;
     private int x;
     private int y;
+    private boolean visited;
+    private int index;
 
     /**
      * Default constructor.
@@ -20,7 +22,7 @@ public class Cell {
      */
     public Cell(char x) {
         this.contents = x;
-
+        this.visited = false;
         this.adjacentCells = new Cell[8];
     }
 
@@ -31,6 +33,15 @@ public class Cell {
      */
     public char getContents() {
         return this.contents;
+    }
+
+    /**
+     * Get index of cell from overall Board position.
+     * 
+     * @return int, index
+     */
+    public int getIndex() {
+        return this.index;
     }
 
     /**
@@ -104,6 +115,21 @@ public class Cell {
         this.contents = newContents;
     }
 
+    /**
+     * Set index of cell from the Board object.
+     * 
+     * @param index
+     */
+    public void setIndex(int index) {
+        this.index = index;
+    }
+
+    /**
+     * Set screen x and y coordinate of cell.
+     * 
+     * @param x int, x coordinate
+     * @param y int, y coordinate
+     */
     public void setCoords(int x, int y) {
         this.x = x;
         this.y = y;
@@ -118,6 +144,29 @@ public class Cell {
         for (int i = 0; i < x.length; ++i) {
             this.adjacentCells[i] = x[i];
         }
+    }
+
+    /**
+     * Mark cell as visited on the board.
+     */
+    public void visit() {
+        this.visited = true;
+    }
+
+    /**
+     * Returns if the cell has been visited yet during the solving loop.
+     * 
+     * @return boolean, true if cell has been visited
+     */
+    public boolean isVisited() {
+        return this.visited;
+    }
+
+    /**
+     * Resets visited boolean to false.
+     */
+    public void resetVisited() {
+        this.visited = false;
     }
 
     /**
