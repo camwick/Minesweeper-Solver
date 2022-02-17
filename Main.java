@@ -55,6 +55,6 @@ public class Main {
 
     System.out.println("\nExecution Time: "
         + (endTime - startTime) / 1000000000.0 + "s");
-    System.out.println("    Solve time: " + (solveStart - startTime) / 1000000000.0 + "s");
+    System.out.println("    Solve time: " + (endTime - solveStart) / 1000000000.0 + "s");
   }
 }
