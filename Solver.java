@@ -544,7 +544,7 @@ public class Solver {
             if (this.infiniteLoop) {
                 System.out.println("No solution found - avoiding infinite loop.\nEnding Program.");
                 System.out.println("State of board" + this.gameBoard);
-                System.exit(1);
+                return;
             }
         }
 
