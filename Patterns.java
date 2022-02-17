@@ -52,7 +52,7 @@ public class Patterns {
         if (adjacent[3] != null
                 && Character.getNumericValue(adjacent[3].getContents()) - adjacent[3].getAdjFlags() == 1) {
             // top left U
-            if (adjacent[0].getContents() == 'U') {
+            if (adjacent[0] != null && adjacent[0].getContents() == 'U') {
                 int counter = 0;
                 for (int i = 1; i <= 2; ++i) {
                     if (adjacent[i].getContents() == 'U')
@@ -66,7 +66,7 @@ public class Patterns {
                     return false;
 
                 // bottom left U
-            } else if (adjacent[5].getContents() == 'U') {
+            } else if (adjacent[5] != null && adjacent[5].getContents() == 'U') {
                 int counter = 0;
                 for (int i = 6; i <= 7; ++i) {
                     if (adjacent[i].getContents() == 'U')
