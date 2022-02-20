@@ -428,8 +428,8 @@ public class Solver {
                     if (adjacent[j].getContents() == 'U') {
                         adjacent[j].setContents('F');
                         rightClick(adjacent[j]);
-                        adjacent[j].visit();
                         this.gameBoard.setNumOfUnclicked(this.gameBoard.getUnclicked() - 1);
+                        adjacent[j].visit();
                         basicFound = true;
                     }
                 }
@@ -482,6 +482,7 @@ public class Solver {
                         // mark flag
                         mine.setContents('F');
                         rightClick(mine);
+                        this.gameBoard.setNumOfUnclicked(this.gameBoard.getUnclicked() - 1);
                         this.infiniteLoop = false;
                     }
                 }
@@ -556,13 +557,19 @@ public class Solver {
                 System.out.println("Advanced cases" + this.gameBoard);
 
             makeMoves();
+        }
 
-            // exit if infinite loop will occurr
-            if (this.infiniteLoop) {
-                System.out.println("No solution found - avoiding infinite loop.\nEnding Program.");
-                System.out.println("State of board" + this.gameBoard);
-                return;
-            }
+        if (this.gameBoard.getUnclicked() == 0) {
+            System.out.println("\nBoard solved!");
+            return;
+        }
+
+        // exit if infinite loop will occurr
+        if (this.infiniteLoop) {
+            System.out.println("No solution found - avoiding infinite loop.\nEnding Program.");
+            System.out.println("Number of unclicked cells: " + this.gameBoard.getUnclicked());
+            System.out.println("State of board" + this.gameBoard);
+            return;
         }
 
         if (this.gameBoard.getUnclicked() != 0) {
