@@ -301,7 +301,7 @@ public class Solver {
             contents = '8';
         // if something bad happens, print the color that gets detected
         else {
-            System.out.printf("Cell index: %d" + cell.getIndex());
+            System.out.println("Cell index: " + cell.getIndex());
             System.out.println("Color: " + px);
         }
 
@@ -509,7 +509,9 @@ public class Solver {
 
                 // hole Pattern
                 if (cell.getNumUnlickedAdj() - 1 == Character.getNumericValue(cellContents) - cell.getAdjFlags()) {
-                    System.out.println("HOLE CANDIDATE");
+                    if (this.debug)
+                        System.out.println("HOLE CANDIDATE");
+
                     if (pattern.holePattern()) {
                         if (this.debug) {
                             System.out.println("Found hole Pattern.");
@@ -542,7 +544,7 @@ public class Solver {
             if (this.infiniteLoop) {
                 System.out.println("No solution found - avoiding infinite loop.\nEnding Program.");
                 System.out.println("State of board" + this.gameBoard);
-                System.exit(1);
+                return;
             }
         }
 
