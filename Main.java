@@ -45,9 +45,16 @@ public class Main {
     input.close();
 
     // create solver object
+    long startTime = System.nanoTime();
     Solver game = new Solver(difficulty, debug, width, height, mineCount);
 
     // start solving
+    long solveStart = System.nanoTime();
     game.solve();
+    long endTime = System.nanoTime();
+
+    System.out.println("\nExecution Time: "
+        + (endTime - startTime) / 1000000000.0 + "s");
+    System.out.println("    Solve time: " + (endTime - solveStart) / 1000000000.0 + "s");
   }
 }
