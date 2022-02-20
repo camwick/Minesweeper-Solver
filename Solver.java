@@ -301,7 +301,7 @@ public class Solver {
             contents = '8';
         // if something bad happens, print the color that gets detected
         else {
-            System.out.printf("Cell index: %d" + cell.getIndex());
+            System.out.println("Cell index: " + cell.getIndex());
             System.out.println("Color: " + px);
         }
 
@@ -428,8 +428,8 @@ public class Solver {
                     if (adjacent[j].getContents() == 'U') {
                         adjacent[j].setContents('F');
                         rightClick(adjacent[j]);
-                        adjacent[j].visit();
                         this.gameBoard.setNumOfUnclicked(this.gameBoard.getUnclicked() - 1);
+                        adjacent[j].visit();
                         basicFound = true;
                     }
                 }
@@ -482,6 +482,7 @@ public class Solver {
                         // mark flag
                         mine.setContents('F');
                         rightClick(mine);
+                        this.gameBoard.setNumOfUnclicked(this.gameBoard.getUnclicked() - 1);
                         this.infiniteLoop = false;
                     }
                 }
@@ -509,7 +510,9 @@ public class Solver {
 
                 // hole Pattern
                 if (cell.getNumUnlickedAdj() - 1 == Character.getNumericValue(cellContents) - cell.getAdjFlags()) {
-                    System.out.println("HOLE CANDIDATE");
+                    if (this.debug)
+                        System.out.println("HOLE CANDIDATE");
+
                     if (pattern.holePattern()) {
                         if (this.debug) {
                             System.out.println("Found hole Pattern.");
@@ -522,6 +525,23 @@ public class Solver {
                                 updateCells(safeCells[j]);
                                 this.gameBoard.resetUnclickedVisitedCells();
                                 this.infiniteLoop = false;
+                            }
+                        }
+
+                        // advanced hole case
+                        if (Character.getNumericValue(safeCells[1].getContents()) - safeCells[1].getAdjFlags() == 1) {
+                            if (pattern.advancedHole()) {
+                                if (this.debug)
+                                    System.out.println("Found advanced hole");
+                                safeCells = pattern.getSafeCells();
+
+                                for (int j = 0; j < safeCells.length; ++j) {
+                                    if (safeCells[j] != null) {
+                                        leftClick(safeCells[j]);
+                                        updateCells(safeCells[j]);
+                                        this.gameBoard.resetUnclickedVisitedCells();
+                                    }
+                                }
                             }
                         }
                     }
@@ -537,13 +557,19 @@ public class Solver {
                 System.out.println("Advanced cases" + this.gameBoard);
 
             makeMoves();
+        }
 
-            // exit if infinite loop will occurr
-            if (this.infiniteLoop) {
-                System.out.println("No solution found - avoiding infinite loop.\nEnding Program.");
-                System.out.println("State of board" + this.gameBoard);
-                System.exit(1);
-            }
+        if (this.gameBoard.getUnclicked() == 0) {
+            System.out.println("\nBoard solved!");
+            return;
+        }
+
+        // exit if infinite loop will occurr
+        if (this.infiniteLoop) {
+            System.out.println("No solution found - avoiding infinite loop.\nEnding Program.");
+            System.out.println("Number of unclicked cells: " + this.gameBoard.getUnclicked());
+            System.out.println("State of board" + this.gameBoard);
+            return;
         }
 
         if (this.gameBoard.getUnclicked() != 0) {
