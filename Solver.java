@@ -526,6 +526,23 @@ public class Solver {
                                 this.infiniteLoop = false;
                             }
                         }
+
+                        // advanced hole case
+                        if (Character.getNumericValue(safeCells[1].getContents()) - safeCells[1].getAdjFlags() == 1) {
+                            if (pattern.advancedHole()) {
+                                if (this.debug)
+                                    System.out.println("Found advanced hole");
+                                safeCells = pattern.getSafeCells();
+
+                                for (int j = 0; j < safeCells.length; ++j) {
+                                    if (safeCells[j] != null) {
+                                        leftClick(safeCells[j]);
+                                        updateCells(safeCells[j]);
+                                        this.gameBoard.resetUnclickedVisitedCells();
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }
