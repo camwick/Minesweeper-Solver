@@ -565,47 +565,31 @@ public class Solver {
             System.out.println("\nBoard solved!");
             return;
         }
+
         if (this.infiniteLoop && this.gameBoard.getUnclicked() != 0 && this.guessIfDumb){
 
-
-            try {
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-    
             if (this.debug){
                 System.out.println("\nNo Solution found, I am now guessing!\n");
             }
+            
             int random = new Random().nextInt(this.gameBoard.getUnclicked());
             Cell guessing = this.gameBoard.getCellAtIndex(0);
             
-            System.out.println("ran " + random);
-            System.out.println("uncl " + this.gameBoard.getUnclicked());
-
             int counter = 0;
             for (int i = 0; i < this.gameBoard.getSize(); ++i) {
                 Cell cell = this.gameBoard.getCellAtIndex(i);
                 char cellContents = cell.getContents();
                 if (cellContents == 'U'){
-                    System.out.println("cont" + cellContents);
                     if (counter == random){
                         guessing = cell;
-
-                        System.out.println("HERE");
-
                         break;
                     }
-                    System.out.println("count " + counter);
                     counter++;
                 }
             }
 
-            System.out.println("guess cont " + guessing.getContents());
             leftClick(guessing);
 
-            
             try {
                 Thread.sleep(100);
             } catch (InterruptedException e) {
@@ -613,24 +597,11 @@ public class Solver {
             }
 
             Color px = this.bot.getPixelColor(guessing.getXCoord(), guessing.getYCoord());
-            System.out.println("px " + px);
-            System.out.println("x " + guessing.getXCoord());
-            System.out.println("y " + guessing.getYCoord());
-            System.out.println("i " + guessing.getIndex());
-
-
             if (px.getRed() == 103 && px.getGreen() == 108 && px.getBlue() == 101) {
                 System.out.println("Oh no! I am so dumb and clumsy... I hit a mine!");
                 return;
             }
 
-
-            try {
-                Thread.sleep(1500);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-    
             updateCells(guessing);
             this.gameBoard.resetUnclickedVisitedCells();
             this.infiniteLoop = false;
