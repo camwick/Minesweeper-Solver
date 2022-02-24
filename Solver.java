@@ -566,21 +566,21 @@ public class Solver {
             return;
         }
 
-        if (this.infiniteLoop && this.gameBoard.getUnclicked() != 0 && this.guessIfDumb){
+        if (this.infiniteLoop && this.gameBoard.getUnclicked() != 0 && this.guessIfDumb) {
 
-            if (this.debug){
+            if (this.debug) {
                 System.out.println("\nNo Solution found, I am now guessing!\n");
             }
-            
+
             int random = new Random().nextInt(this.gameBoard.getUnclicked());
             Cell guessing = this.gameBoard.getCellAtIndex(0);
-            
+
             int counter = 0;
             for (int i = 0; i < this.gameBoard.getSize(); ++i) {
                 Cell cell = this.gameBoard.getCellAtIndex(i);
                 char cellContents = cell.getContents();
-                if (cellContents == 'U'){
-                    if (counter == random){
+                if (cellContents == 'U') {
+                    if (counter == random) {
                         guessing = cell;
                         break;
                     }
@@ -591,7 +591,7 @@ public class Solver {
             leftClick(guessing);
 
             try {
-                Thread.sleep(100);
+                Thread.sleep(500);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -605,7 +605,7 @@ public class Solver {
             updateCells(guessing);
             this.gameBoard.resetUnclickedVisitedCells();
             this.infiniteLoop = false;
-            makeMoves();    
+            makeMoves();
         }
 
         // exit if infinite loop will occurr
