@@ -10,8 +10,10 @@ Make sure to create a pull request before merging to main.
 
 ## Working On:
 
-- hole pattern
-- more mine pattern recognition
+- bug fixes!
+  - more bug fixes
+- final edge cases we forgot about
+- GUI
 
 ## Goals:
 
