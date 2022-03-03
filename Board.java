@@ -275,6 +275,10 @@ public class Board {
         }
     }
 
+    public void decreaseMinecount() {
+        this.mineCount--;
+    }
+
     /**
      * Outputs a string of a board object in a pretty fasion :)
      */
