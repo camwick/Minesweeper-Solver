@@ -432,6 +432,7 @@ public class Solver {
                         rightClick(adjacent[j]);
                         this.gameBoard.setNumOfUnclicked(this.gameBoard.getUnclicked() - 1);
                         adjacent[j].visit();
+                        this.gameBoard.decreaseMinecount();
                         basicFound = true;
                     }
                 }
@@ -485,6 +486,8 @@ public class Solver {
                         mine.setContents('F');
                         rightClick(mine);
                         this.gameBoard.setNumOfUnclicked(this.gameBoard.getUnclicked() - 1);
+                        this.gameBoard.decreaseMinecount();
+                        mine.visit();
                         this.infiniteLoop = false;
                     }
                 }
