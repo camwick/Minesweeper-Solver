@@ -74,6 +74,10 @@ public class Board {
         return this.height;
     }
 
+    public int getMineCount() {
+        return this.mineCount;
+    }
+
     /**
      * Set number of unclicked cells
      * 
@@ -273,6 +277,10 @@ public class Board {
             if (this.board[i].getContents() == 'U')
                 this.board[i].resetVisited();
         }
+    }
+
+    public void decreaseMinecount() {
+        this.mineCount--;
     }
 
     /**
