@@ -17,6 +17,10 @@ public class Solver {
     private boolean infiniteLoop = true;
     private boolean guessIfDumb = true;
 
+    public Solver(int difficulty, boolean debug) {
+        this(difficulty, debug, 0, 0, 0);
+    }
+
     /**
      * Constructor with debugging information.
      * 
