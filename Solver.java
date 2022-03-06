@@ -564,11 +564,23 @@ public class Solver {
             makeMoves();
         }
 
+        // end solver if all Unclicked cells are clicked
         if (this.gameBoard.getUnclicked() == 0) {
             System.out.println("\nBoard solved!");
             return;
         }
 
+        // click all unclicked cells if minecount == 0 & end the solver
+        if (this.gameBoard.getMineCount() == 0) {
+            for (int i = 0; i < this.gameBoard.getSize(); ++i) {
+                if (this.gameBoard.getCellAtIndex(i).getContents() == 'U')
+                    leftClick(this.gameBoard.getCellAtIndex(i));
+            }
+            System.out.println("\nBoard solved!");
+            return;
+        }
+
+        // if an infinite loop were to occur: click a random unclicked cell
         if (this.infiniteLoop && this.gameBoard.getUnclicked() != 0 && this.guessIfDumb) {
 
             if (this.debug) {
