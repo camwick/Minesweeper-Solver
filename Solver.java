@@ -3,6 +3,7 @@ import java.awt.AWTException;
 import java.awt.Color;
 import java.awt.Toolkit;
 import java.awt.event.InputEvent;
+import java.util.Random;
 
 public class Solver {
     private Robot bot;
@@ -14,6 +15,7 @@ public class Solver {
     private boolean debug = false;
     private Cell startCell;
     private boolean infiniteLoop = true;
+    private boolean guessIfDumb = true;
 
     /**
      * Constructor with debugging information.
@@ -430,6 +432,7 @@ public class Solver {
                         rightClick(adjacent[j]);
                         this.gameBoard.setNumOfUnclicked(this.gameBoard.getUnclicked() - 1);
                         adjacent[j].visit();
+                        this.gameBoard.decreaseMinecount();
                         basicFound = true;
                     }
                 }
@@ -483,6 +486,8 @@ public class Solver {
                         mine.setContents('F');
                         rightClick(mine);
                         this.gameBoard.setNumOfUnclicked(this.gameBoard.getUnclicked() - 1);
+                        this.gameBoard.decreaseMinecount();
+                        mine.visit();
                         this.infiniteLoop = false;
                     }
                 }
@@ -559,9 +564,64 @@ public class Solver {
             makeMoves();
         }
 
+        // end solver if all Unclicked cells are clicked
         if (this.gameBoard.getUnclicked() == 0) {
             System.out.println("\nBoard solved!");
             return;
+        }
+
+        // click all unclicked cells if minecount == 0 & end the solver
+        if (this.gameBoard.getMineCount() == 0) {
+            for (int i = 0; i < this.gameBoard.getSize(); ++i) {
+                if (this.gameBoard.getCellAtIndex(i).getContents() == 'U')
+                    leftClick(this.gameBoard.getCellAtIndex(i));
+            }
+            System.out.println("\nBoard solved!");
+            return;
+        }
+
+        // if an infinite loop were to occur: click a random unclicked cell
+        if (this.infiniteLoop && this.gameBoard.getUnclicked() != 0 && this.guessIfDumb) {
+
+            if (this.debug) {
+                System.out.println("\nNo Solution found, I am now guessing!\n");
+            }
+
+            int random = new Random().nextInt(this.gameBoard.getUnclicked());
+            Cell guessing = this.gameBoard.getCellAtIndex(0);
+
+            int counter = 0;
+            for (int i = 0; i < this.gameBoard.getSize(); ++i) {
+                Cell cell = this.gameBoard.getCellAtIndex(i);
+                char cellContents = cell.getContents();
+                if (cellContents == 'U') {
+                    if (counter == random) {
+                        guessing = cell;
+                        break;
+                    }
+                    counter++;
+                }
+            }
+
+            leftClick(guessing);
+
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            Color px = this.bot.getPixelColor(guessing.getXCoord(), guessing.getYCoord());
+
+            if ((px.getRed() == 103 || px.getRed() == 102) && px.getGreen() == 108 && px.getBlue() == 101) {
+                System.out.println("Oh no! I am so dumb and clumsy... I hit a mine!");
+                return;
+            }
+
+            updateCells(guessing);
+            this.gameBoard.resetUnclickedVisitedCells();
+            this.infiniteLoop = false;
+            makeMoves();
         }
 
         // exit if infinite loop will occurr
