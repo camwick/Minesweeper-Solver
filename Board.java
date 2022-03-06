@@ -74,6 +74,10 @@ public class Board {
         return this.height;
     }
 
+    public int getMineCount() {
+        return this.mineCount;
+    }
+
     /**
      * Set number of unclicked cells
      * 
