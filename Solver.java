@@ -612,7 +612,8 @@ public class Solver {
             }
 
             Color px = this.bot.getPixelColor(guessing.getXCoord(), guessing.getYCoord());
-            if (px.getRed() == 103 && px.getGreen() == 108 && px.getBlue() == 101) {
+
+            if ((px.getRed() == 103 || px.getRed() == 102) && px.getGreen() == 108 && px.getBlue() == 101) {
                 System.out.println("Oh no! I am so dumb and clumsy... I hit a mine!");
                 return;
             }
