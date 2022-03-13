@@ -47,7 +47,7 @@ public class SolverGui {
 
     // JFrame
     JFrame mainWindow = new JFrame("Minesweeper Solver");
-    mainWindow.setSize(385, 430);
+    mainWindow.setSize(385, 415);
     mainWindow.setResizable(false);
     mainWindow.setLocationRelativeTo(null);
     mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -55,7 +55,7 @@ public class SolverGui {
 
     // title
     JLabel title = new JLabel("<HTML><U>Minesweeper Solver</U></HTML>");
-    title.setBounds(80, 10, 242, 40);
+    title.setBounds(70, 10, 242, 40);
     title.setFont(titleFont);
     mainWindow.add(title);
 
@@ -89,7 +89,7 @@ public class SolverGui {
 
     // Guessing Header
     JLabel guessingHeader = new JLabel("Make Guesses?");
-    guessingHeader.setBounds(175, 50, 150, 40);
+    guessingHeader.setBounds(220, 50, 150, 40);
     guessingHeader.setFont(headerBtnFont);
     mainWindow.add(guessingHeader);
 
@@ -99,7 +99,7 @@ public class SolverGui {
     ButtonGroup guessingGroup = new ButtonGroup();
     for (int i = 0; i < guessingButtons.length; ++i) {
       guessingButtons[i] = new JRadioButton(guessingLabels[i]);
-      guessingButtons[i].setBounds(210, 95 + (40 * i), 108, 15);
+      guessingButtons[i].setBounds(220, 95 + (40 * i), 108, 15);
       guessingButtons[i].setFont(plainFont);
       guessingGroup.add(guessingButtons[i]);
       mainWindow.add(guessingButtons[i]);
@@ -107,7 +107,7 @@ public class SolverGui {
 
     // Solve Button
     JButton solveBtn = new JButton("Solve");
-    solveBtn.setBounds(80, 310, 242, 60);
+    solveBtn.setBounds(10, 300, 350, 60);
     solveBtn.setFont(headerBtnFont);
     mainWindow.add(solveBtn);
 
