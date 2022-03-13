@@ -17,8 +17,8 @@ public class Solver {
     private boolean infiniteLoop = true;
     private boolean guessIfDumb = true;
 
-    public Solver(int difficulty, boolean debug) {
-        this(difficulty, false, debug, 0, 0, 0);
+    public Solver(int difficulty, boolean guessing, boolean debug) {
+        this(difficulty, guessing, debug, 0, 0, 0);
     }
 
     /**
