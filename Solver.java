@@ -18,7 +18,7 @@ public class Solver {
     private boolean guessIfDumb = true;
 
     public Solver(int difficulty, boolean debug) {
-        this(difficulty, debug, 0, 0, 0);
+        this(difficulty, false, debug, 0, 0, 0);
     }
 
     /**
@@ -29,9 +29,12 @@ public class Solver {
      *                   calibration
      * @throws InterruptedException
      */
-    public Solver(int difficulty, boolean debug, int width, int height, int mineCount) {
+    public Solver(int difficulty, boolean guessing, boolean debug, int width, int height, int mineCount) {
         // set debug boolean
         this.debug = debug;
+
+        // set guessing boolean
+        this.guessIfDumb = guessing;
 
         // create bot object
         try {
