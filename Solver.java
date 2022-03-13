@@ -17,6 +17,10 @@ public class Solver {
     private boolean infiniteLoop = true;
     private boolean guessIfDumb = true;
 
+    public Solver(int difficulty, boolean guessing, boolean debug) {
+        this(difficulty, guessing, debug, 0, 0, 0);
+    }
+
     /**
      * Constructor with debugging information.
      * 
@@ -25,9 +29,12 @@ public class Solver {
      *                   calibration
      * @throws InterruptedException
      */
-    public Solver(int difficulty, boolean debug, int width, int height, int mineCount) {
+    public Solver(int difficulty, boolean guessing, boolean debug, int width, int height, int mineCount) {
         // set debug boolean
         this.debug = debug;
+
+        // set guessing boolean
+        this.guessIfDumb = guessing;
 
         // create bot object
         try {

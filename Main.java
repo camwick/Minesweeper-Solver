@@ -46,7 +46,7 @@ public class Main {
 
     // create solver object
     long startTime = System.nanoTime();
-    Solver game = new Solver(difficulty, debug, width, height, mineCount);
+    Solver game = new Solver(difficulty, true, debug, width, height, mineCount);
 
     // start solving
     long solveStart = System.nanoTime();
