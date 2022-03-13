@@ -219,8 +219,8 @@ public class Solver {
     }
 
     /**
-     * Gets the board state from the screen and converts it into a String based on
-     * color values.
+     * Sets all the cell value's x and y positions.
+     * Also finds and stores the starting green x position to start the game.
      */
     private void syncBoard() {
         // x and y coordinates of the middle of the first cell
@@ -260,7 +260,7 @@ public class Solver {
 
     /**
      * Recursively traverses the adjacent Cells to update the uncovered cells'
-     * contents
+     * contents. Uses BFS tree/graph search algorithm to traverse the cell objects.
      * 
      * @param cell starting node of the graph DFS
      */
@@ -354,7 +354,7 @@ public class Solver {
     }
 
     /**
-     * Initiates left clicking on safe cells.
+     * Left clicks cells that are safe.
      */
     private void makeMoves() {
         // loop through entire board
@@ -569,7 +569,7 @@ public class Solver {
                 }
             }
 
-            /**
+            /*
              * not including the two cells adjacent to the hole:
              * - trunk of the hole needs one less unclickedAdj not including around the hole
              */
