@@ -17,17 +17,28 @@ public class Solver {
     private boolean infiniteLoop = true;
     private boolean guessIfDumb = true;
 
+    /**
+     * Default constructor.
+     * Initiates Solver object that will ultimately solve the minesweeper board.
+     * 
+     * @param difficulty int, difficulty of minesweeper board.
+     * @param guessing   boolean, guessing turned on when true.
+     * @param debug      boolean, debug mode turned on when true.
+     */
     public Solver(int difficulty, boolean guessing, boolean debug) {
         this(difficulty, guessing, debug, 0, 0, 0);
     }
 
     /**
-     * Constructor with debugging information.
+     * Overloaded constructor.
+     * Initiates Solver object that will ultimately solve the minesweeper board
      * 
-     * @param difficulty Integer corresponding to board difficulty
-     * @param debug      Boolean - print debug messages and move mouse on
-     *                   calibration
-     * @throws InterruptedException
+     * @param difficulty int, difficulty of minesweeper board.
+     * @param guessing   boolean, guessing turned on when true.
+     * @param debug      boolean, guessing turned on when true.
+     * @param width      int, width of minesweeper board.
+     * @param height     int, height of minesweeper board.
+     * @param mineCount  int, number of mines on minesweeper board.
      */
     public Solver(int difficulty, boolean guessing, boolean debug, int width, int height, int mineCount) {
         // set debug boolean
@@ -94,8 +105,8 @@ public class Solver {
     }
 
     /**
-     * Finds the upper left-hand of the game board. Position found is the first
-     * pixel of the Cell array.
+     * Finds the upper left hand corner of the minesweeper board, cell length, and
+     * starting green x.
      */
     private void calibrateBoard() {
         // declaring variables
@@ -210,8 +221,6 @@ public class Solver {
     /**
      * Gets the board state from the screen and converts it into a String based on
      * color values.
-     * 
-     * @param start If true, save the coordinates of the green X
      */
     private void syncBoard() {
         // x and y coordinates of the middle of the first cell

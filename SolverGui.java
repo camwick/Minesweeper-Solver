@@ -11,6 +11,14 @@ import java.awt.event.FocusListener;
 import java.awt.event.FocusEvent;
 
 public class SolverGui {
+  /**
+   * Default method to create and run a Solver object.
+   * Creates a new thread for solver to run on.
+   * 
+   * @param difficulty int, difficulty of the minesweeper board.
+   * @param guessing   boolean, guessing turned on when true.
+   * @param debug      boolean, debug mode turned on when true
+   */
   private static void runSolver(int difficulty, boolean guessing, boolean debug) {
     Thread th = new Thread(new Runnable() {
       @Override
@@ -23,6 +31,18 @@ public class SolverGui {
     th.start();
   }
 
+  /**
+   * Overloaded method to create and run a solver object. Accepts parameters
+   * specifying the width, height, and mine count for custom sized boards.
+   * Creates a new thread for solver to run on.
+   * 
+   * @param difficulty int, difficulty of the minesweeper board.
+   * @param guessing   boolean, guessing turned on when true.
+   * @param debug      boolean, debug mode turned on when true
+   * @param width      int, width of minesweeper board.
+   * @param height     int, height of minesweeper board.
+   * @param mines      int, number of mines on the minesweeper board.
+   */
   private static void runSolver(int difficulty, boolean guessing, boolean debug, int width, int height, int mines) {
     Thread th = new Thread(new Runnable() {
       @Override
@@ -35,6 +55,11 @@ public class SolverGui {
     th.start();
   }
 
+  /**
+   * Create gui
+   * 
+   * @param args command line argument enables debug mode
+   */
   public static void main(String[] args) {
     boolean debug = false;
     if (args.length == 1)
