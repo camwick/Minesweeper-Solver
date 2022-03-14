@@ -181,6 +181,21 @@ public class Patterns {
         return false;
     }
 
+    /**
+     * Recognizes a 1-1 pattern:
+     * ---------
+     * | 1 1 2 |
+     * | U U U |
+     * ---------
+     * vvvvvvvvv
+     * ---------
+     * | 1 1 2 |
+     * | U U ! |
+     * ---------
+     * Safe to left click exclamation point.
+     * 
+     * @return boolean, true if found a 1-1 candidate.
+     */
     public boolean oneOnePattern() {
         Cell[] adjacents = this.cell.getAdjacent();
 
@@ -271,6 +286,23 @@ public class Patterns {
         return false;
     }
 
+    /**
+     * Recognizes a hole pattern in the board.
+     * -----------
+     * | 1 1 2 1 |
+     * | U U 1 U |
+     * | U U U U |
+     * -----------
+     * vvvvvvvvvvv
+     * -----------
+     * | 1 1 2 1 |
+     * | U U 1 U |
+     * | U ! ! ! |
+     * -----------
+     * Safe to left click exclamation points.
+     * 
+     * @return boolean, true if found a hole candidate.
+     */
     boolean holePattern() {
         Cell[] adjacents = this.cell.getAdjacent();
 
@@ -349,6 +381,26 @@ public class Patterns {
         return false;
     }
 
+    /**
+     * Recognizes advanced hole patterns.
+     * -----------
+     * | 1 1 2 1 |
+     * | U U 1 U |
+     * | U # 1 # |
+     * | U U U U |
+     * -----------
+     * vvvvvvvvvvv
+     * -----------
+     * | 1 1 2 1 |
+     * | U U 1 U |
+     * | U # 1 # |
+     * | U ! ! ! |
+     * -----------
+     * Directly after a hole pattern, if the mine directly under the hole is a
+     * logical one, then we can left click 3 more cells.
+     * 
+     * @return
+     */
     public boolean advancedHole() {
         Cell cell = this.safeCells[1];
 
@@ -407,6 +459,11 @@ public class Patterns {
         return this.mine;
     }
 
+    /**
+     * Return an array of safe cells to click found by the patterns.
+     * 
+     * @return Cell array, marked safe cells.
+     */
     Cell[] getSafeCells() {
         return this.safeCells;
     }
