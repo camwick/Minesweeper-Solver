@@ -18,16 +18,34 @@ public class Solver {
     private boolean guessIfDumb = true;
 
     /**
-     * Constructor with debugging information.
+     * Default constructor.
+     * Initiates Solver object that will ultimately solve the minesweeper board.
      * 
-     * @param difficulty Integer corresponding to board difficulty
-     * @param debug      Boolean - print debug messages and move mouse on
-     *                   calibration
-     * @throws InterruptedException
+     * @param difficulty int, difficulty of minesweeper board.
+     * @param guessing   boolean, guessing turned on when true.
+     * @param debug      boolean, debug mode turned on when true.
      */
-    public Solver(int difficulty, boolean debug, int width, int height, int mineCount) {
+    public Solver(int difficulty, boolean guessing, boolean debug) {
+        this(difficulty, guessing, debug, 0, 0, 0);
+    }
+
+    /**
+     * Overloaded constructor.
+     * Initiates Solver object that will ultimately solve the minesweeper board
+     * 
+     * @param difficulty int, difficulty of minesweeper board.
+     * @param guessing   boolean, guessing turned on when true.
+     * @param debug      boolean, guessing turned on when true.
+     * @param width      int, width of minesweeper board.
+     * @param height     int, height of minesweeper board.
+     * @param mineCount  int, number of mines on minesweeper board.
+     */
+    public Solver(int difficulty, boolean guessing, boolean debug, int width, int height, int mineCount) {
         // set debug boolean
         this.debug = debug;
+
+        // set guessing boolean
+        this.guessIfDumb = guessing;
 
         // create bot object
         try {
@@ -87,8 +105,8 @@ public class Solver {
     }
 
     /**
-     * Finds the upper left-hand of the game board. Position found is the first
-     * pixel of the Cell array.
+     * Finds the upper left hand corner of the minesweeper board, cell length, and
+     * starting green x.
      */
     private void calibrateBoard() {
         // declaring variables
@@ -201,10 +219,8 @@ public class Solver {
     }
 
     /**
-     * Gets the board state from the screen and converts it into a String based on
-     * color values.
-     * 
-     * @param start If true, save the coordinates of the green X
+     * Sets all the cell value's x and y positions.
+     * Also finds and stores the starting green x position to start the game.
      */
     private void syncBoard() {
         // x and y coordinates of the middle of the first cell
@@ -244,7 +260,7 @@ public class Solver {
 
     /**
      * Recursively traverses the adjacent Cells to update the uncovered cells'
-     * contents
+     * contents. Uses BFS tree/graph search algorithm to traverse the cell objects.
      * 
      * @param cell starting node of the graph DFS
      */
@@ -338,7 +354,7 @@ public class Solver {
     }
 
     /**
-     * Initiates left clicking on safe cells.
+     * Left clicks cells that are safe.
      */
     private void makeMoves() {
         // loop through entire board
@@ -553,7 +569,7 @@ public class Solver {
                 }
             }
 
-            /**
+            /*
              * not including the two cells adjacent to the hole:
              * - trunk of the hole needs one less unclickedAdj not including around the hole
              */

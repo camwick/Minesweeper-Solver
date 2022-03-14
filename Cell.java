@@ -47,16 +47,16 @@ public class Cell {
     /**
      * Returns the adjacentCells object
      * 
-     * @return adjacent Cells array
+     * @return Cell array containing the cell's adjacent cells.
      */
     public Cell[] getAdjacent() {
         return this.adjacentCells;
     }
 
     /**
-     * Get number of of adjacent unclicked cells
+     * Get number of of adjacent, unclicked cells
      * 
-     * @return int, number of adjacent unclicked cells
+     * @return int, number of adjacent, unclicked cells
      */
     public int getNumUnlickedAdj() {
         int count = 0;
@@ -93,7 +93,7 @@ public class Cell {
      * 
      * @return int, number of adjacent flags
      */
-    public int getAdjFlags() {
+    public int getNumAdjFlags() {
         int count = 0;
         for (int i = 0; i < adjacentCells.length; ++i) {
             if (adjacentCells[i] == null || adjacentCells[i].getContents() == 'U'

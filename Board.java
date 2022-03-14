@@ -7,7 +7,7 @@ public class Board {
 
     /**
      * Default constuctor.
-     * Constructs 2-D board object
+     * Constructs cell array and information about the board.
      * 
      * @param width  int, board width
      * @param height int, board height

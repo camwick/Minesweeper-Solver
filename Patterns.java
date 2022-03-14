@@ -51,7 +51,7 @@ public class Patterns {
 
         // 1 left of 2
         if (adjacent[3] != null
-                && Character.getNumericValue(adjacent[3].getContents()) - adjacent[3].getAdjFlags() == 1) {
+                && Character.getNumericValue(adjacent[3].getContents()) - adjacent[3].getNumAdjFlags() == 1) {
             // top left U
             if (adjacent[0] != null && adjacent[0].getContents() == 'U') {
                 int counter = 0;
@@ -83,7 +83,7 @@ public class Patterns {
 
         // 1 right of 2
         if (adjacent[4] != null
-                && Character.getNumericValue(adjacent[4].getContents()) - adjacent[4].getAdjFlags() == 1) {
+                && Character.getNumericValue(adjacent[4].getContents()) - adjacent[4].getNumAdjFlags() == 1) {
             // top left U
             if (adjacent[0].getContents() == 'U') {
                 int counter = 0;
@@ -115,7 +115,7 @@ public class Patterns {
 
         // 1 above the 2
         if (adjacent[1] != null
-                && Character.getNumericValue(adjacent[1].getContents()) - adjacent[1].getAdjFlags() == 1) {
+                && Character.getNumericValue(adjacent[1].getContents()) - adjacent[1].getNumAdjFlags() == 1) {
             // top right U
             if (adjacent[2].getContents() == 'U') {
                 int counter = 0;
@@ -147,7 +147,7 @@ public class Patterns {
 
         // 1 below the 2
         if (adjacent[6] != null
-                && Character.getNumericValue(adjacent[6].getContents()) - adjacent[6].getAdjFlags() == 1) {
+                && Character.getNumericValue(adjacent[6].getContents()) - adjacent[6].getNumAdjFlags() == 1) {
             // top right U
             if (adjacent[2].getContents() == 'U') {
                 int counter = 0;
@@ -181,12 +181,27 @@ public class Patterns {
         return false;
     }
 
+    /**
+     * Recognizes a 1-1 pattern:
+     * ---------
+     * | 1 1 2 |
+     * | U U U |
+     * ---------
+     * vvvvvvvvv
+     * ---------
+     * | 1 1 2 |
+     * | U U ! |
+     * ---------
+     * Safe to left click exclamation point.
+     * 
+     * @return boolean, true if found a 1-1 candidate.
+     */
     public boolean oneOnePattern() {
         Cell[] adjacents = this.cell.getAdjacent();
 
         // 1 to right
         if (adjacents[4] != null
-                && Character.getNumericValue(adjacents[4].getContents()) - adjacents[4].getAdjFlags() == 1) {
+                && Character.getNumericValue(adjacents[4].getContents()) - adjacents[4].getNumAdjFlags() == 1) {
             if ((adjacents[1] != null && adjacents[1].getContents() == 'U' && adjacents[2].getContents() == 'U')
                     || (adjacents[6] != null && adjacents[6].getContents() == 'U'
                             && adjacents[7].getContents() == 'U')) {
@@ -208,7 +223,7 @@ public class Patterns {
 
         // 1 to left
         if (adjacents[3] != null
-                && Character.getNumericValue(adjacents[3].getContents()) - adjacents[3].getAdjFlags() == 1) {
+                && Character.getNumericValue(adjacents[3].getContents()) - adjacents[3].getNumAdjFlags() == 1) {
             if ((adjacents[0] != null && adjacents[0].getContents() == 'U' && adjacents[1].getContents() == 'U')
                     || (adjacents[5] != null && adjacents[5].getContents() == 'U'
                             && adjacents[6].getContents() == 'U')) {
@@ -230,7 +245,7 @@ public class Patterns {
 
         // 1 above
         if (adjacents[1] != null
-                && Character.getNumericValue(adjacents[1].getContents()) - adjacents[1].getAdjFlags() == 1) {
+                && Character.getNumericValue(adjacents[1].getContents()) - adjacents[1].getNumAdjFlags() == 1) {
             if ((adjacents[0] != null && adjacents[0].getContents() == 'U' && adjacents[3].getContents() == 'U')
                     || (adjacents[2] != null && adjacents[2].getContents() == 'U'
                             && adjacents[4].getContents() == 'U')) {
@@ -250,7 +265,7 @@ public class Patterns {
 
         // 1 below
         if (adjacents[6] != null
-                && Character.getNumericValue(adjacents[6].getContents()) - adjacents[6].getAdjFlags() == 1) {
+                && Character.getNumericValue(adjacents[6].getContents()) - adjacents[6].getNumAdjFlags() == 1) {
             if ((adjacents[3] != null && adjacents[3].getContents() == 'U' && adjacents[5].getContents() == 'U')
                     || (adjacents[4] != null && adjacents[4].getContents() == 'U'
                             && adjacents[7].getContents() == 'U')) {
@@ -271,13 +286,30 @@ public class Patterns {
         return false;
     }
 
+    /**
+     * Recognizes a hole pattern in the board.
+     * -----------
+     * | 1 1 2 1 |
+     * | U U 1 U |
+     * | U U U U |
+     * -----------
+     * vvvvvvvvvvv
+     * -----------
+     * | 1 1 2 1 |
+     * | U U 1 U |
+     * | U ! ! ! |
+     * -----------
+     * Safe to left click exclamation points.
+     * 
+     * @return boolean, true if found a hole candidate.
+     */
     boolean holePattern() {
         Cell[] adjacents = this.cell.getAdjacent();
 
         // safe to left
         if (adjacents[2] != null && adjacents[7] != null && adjacents[2].getContents() == 'U'
                 && adjacents[7].getContents() == 'U'
-                && Character.getNumericValue(adjacents[4].getContents()) - adjacents[4].getAdjFlags() == 1) {
+                && Character.getNumericValue(adjacents[4].getContents()) - adjacents[4].getNumAdjFlags() == 1) {
             if (adjacents[4].getAdjacent()[4] != null && (adjacents[4].getAdjacent()[2].getContents() == 'U'
                     || adjacents[4].getAdjacent()[4].getContents() == 'U'
                     || adjacents[4].getAdjacent()[7].getContents() == 'U')) {
@@ -294,7 +326,7 @@ public class Patterns {
         // safe to right - hole to the left
         if (adjacents[0] != null && adjacents[5] != null && adjacents[0].getContents() == 'U'
                 && adjacents[5].getContents() == 'U'
-                && Character.getNumericValue(adjacents[3].getContents()) - adjacents[3].getAdjFlags() == 1) {
+                && Character.getNumericValue(adjacents[3].getContents()) - adjacents[3].getNumAdjFlags() == 1) {
             if (adjacents[3].getAdjacent()[3] != null && (adjacents[3].getAdjacent()[0].getContents() == 'U'
                     || adjacents[3].getAdjacent()[3].getContents() == 'U'
                     || adjacents[3].getAdjacent()[5].getContents() == 'U')) {
@@ -312,7 +344,7 @@ public class Patterns {
         // safe above
         if (adjacents[5] != null && adjacents[7] != null && adjacents[5].getContents() == 'U'
                 && adjacents[7].getContents() == 'U'
-                && Character.getNumericValue(adjacents[6].getContents()) - adjacents[6].getAdjFlags() == 1) {
+                && Character.getNumericValue(adjacents[6].getContents()) - adjacents[6].getNumAdjFlags() == 1) {
             if (adjacents[6].getAdjacent()[6] != null && (adjacents[6].getAdjacent()[5].getContents() == 'U'
                     || adjacents[6].getAdjacent()[6].getContents() == 'U'
                     || adjacents[6].getAdjacent()[7].getContents() == 'U')) {
@@ -332,7 +364,7 @@ public class Patterns {
         // safe below
         if (adjacents[0] != null && adjacents[2] != null && adjacents[0].getContents() == 'U'
                 && adjacents[2].getContents() == 'U'
-                && Character.getNumericValue(adjacents[1].getContents()) - adjacents[1].getAdjFlags() == 1) {
+                && Character.getNumericValue(adjacents[1].getContents()) - adjacents[1].getNumAdjFlags() == 1) {
             if (adjacents[1].getAdjacent()[1] != null && (adjacents[1].getAdjacent()[0].getContents() == 'U'
                     || adjacents[1].getAdjacent()[1].getContents() == 'U'
                     || adjacents[1].getAdjacent()[2].getContents() == 'U')) {
@@ -349,6 +381,26 @@ public class Patterns {
         return false;
     }
 
+    /**
+     * Recognizes advanced hole patterns.
+     * -----------
+     * | 1 1 2 1 |
+     * | U U 1 U |
+     * | U # 1 # |
+     * | U U U U |
+     * -----------
+     * vvvvvvvvvvv
+     * -----------
+     * | 1 1 2 1 |
+     * | U U 1 U |
+     * | U # 1 # |
+     * | U ! ! ! |
+     * -----------
+     * Directly after a hole pattern, if the mine directly under the hole is a
+     * logical one, then we can left click 3 more cells.
+     * 
+     * @return
+     */
     public boolean advancedHole() {
         Cell cell = this.safeCells[1];
 
@@ -407,6 +459,11 @@ public class Patterns {
         return this.mine;
     }
 
+    /**
+     * Return an array of safe cells to click found by the patterns.
+     * 
+     * @return Cell array, marked safe cells.
+     */
     Cell[] getSafeCells() {
         return this.safeCells;
     }
