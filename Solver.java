@@ -368,7 +368,7 @@ public class Solver {
                 continue;
 
             // make moves
-            if (cell.getAdjFlags() == Character.getNumericValue(cellContents) && cell.getNumUnlickedAdj() != 0) {
+            if (cell.getNumAdjFlags() == Character.getNumericValue(cellContents) && cell.getNumUnlickedAdj() != 0) {
                 for (int j = 0; j < adjacent.length; ++j) {
                     if (adjacent[j] == null)
                         continue;
@@ -433,10 +433,10 @@ public class Solver {
 
             // marks flags
             Cell[] adjacent = cell.getAdjacent();
-            if (cell.getNumUnlickedAdj() == Character.getNumericValue(cellContents) - cell.getAdjFlags()
-                    && cell.getAdjFlags() != Character.getNumericValue(cellContents)) {
+            if (cell.getNumUnlickedAdj() == Character.getNumericValue(cellContents) - cell.getNumAdjFlags()
+                    && cell.getNumAdjFlags() != Character.getNumericValue(cellContents)) {
                 for (int j = 0; j < adjacent.length; ++j) {
-                    if (cell.getAdjFlags() == Character.getNumericValue(cellContents))
+                    if (cell.getNumAdjFlags() == Character.getNumericValue(cellContents))
                         break;
 
                     if (adjacent[j] == null || adjacent[j].getContents() == 'F')
@@ -491,7 +491,7 @@ public class Solver {
 
                 // 1 - 2 Pattern
                 // check for a two
-                if (Character.getNumericValue(cellContents) - cell.getAdjFlags() == 2) {
+                if (Character.getNumericValue(cellContents) - cell.getNumAdjFlags() == 2) {
                     if (pattern.onetwoPattern()) {
                         if (this.debug)
                             System.out.println("Found 1-2 Pattern.");
@@ -511,7 +511,7 @@ public class Solver {
                 // 1-1 Pattern
                 // check for a one
                 if (cell.getNumUnlickedAdj() == 2
-                        && Character.getNumericValue(cellContents) - cell.getAdjFlags() == 1) {
+                        && Character.getNumericValue(cellContents) - cell.getNumAdjFlags() == 1) {
                     if (pattern.oneOnePattern()) {
                         if (this.debug)
                             System.out.println("Found 1-1 Pattern.");
@@ -530,7 +530,7 @@ public class Solver {
                 }
 
                 // hole Pattern
-                if (cell.getNumUnlickedAdj() - 1 == Character.getNumericValue(cellContents) - cell.getAdjFlags()) {
+                if (cell.getNumUnlickedAdj() - 1 == Character.getNumericValue(cellContents) - cell.getNumAdjFlags()) {
                     if (this.debug)
                         System.out.println("HOLE CANDIDATE");
 
@@ -550,7 +550,8 @@ public class Solver {
                         }
 
                         // advanced hole case
-                        if (Character.getNumericValue(safeCells[1].getContents()) - safeCells[1].getAdjFlags() == 1) {
+                        if (Character.getNumericValue(safeCells[1].getContents())
+                                - safeCells[1].getNumAdjFlags() == 1) {
                             if (pattern.advancedHole()) {
                                 if (this.debug)
                                     System.out.println("Found advanced hole");
